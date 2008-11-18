@@ -2,7 +2,6 @@
 ;; File     : binpack.clj
 ;; Function : Binary Packing
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Newest version can be obtained at http://www.freshlime.org
 ;; Send comments or questions to code at freshlime dot org
 ;; $Id$
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

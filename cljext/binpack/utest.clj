@@ -6,7 +6,6 @@
     (:refer cljext.limits)
     )
 
-
 (defn loopback
   ([fmt & params]
    (test-is/is 
@@ -35,7 +34,6 @@
   ;; check arguments
   (check-argument "b" -129)
   (check-argument "b" 128)
-
 
   ;; test unsigned byte
   (loopback "<B" +min-unsigned-byte+)
@@ -93,7 +91,6 @@
   (loopback "<L" +max-unsigned-long+)
   (check-argument "L" (dec +min-unsigned-long+))
   (check-argument "L" (inc +max-unsigned-long+))
-
 
   )
 
