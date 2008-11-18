@@ -4,7 +4,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Newest version can be obtained at http://www.freshlime.org
 ;; Send comments or questions to code at freshlime dot org
-;; $Id: math.clj 5 2008-11-16 21:26:32Z jbester $
+;; $Id$
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Copyright (c) 2008, J. Bester
 ;; All rights reserved.

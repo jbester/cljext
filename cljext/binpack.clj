@@ -4,7 +4,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Newest version can be obtained at http://www.freshlime.org
 ;; Send comments or questions to code at freshlime dot org
-;; $Id: binpack.clj 9 2008-11-17 12:23:55Z jbester $
+;; $Id$
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Copyright (c) 2008, J. Bester
 ;; All rights reserved.
