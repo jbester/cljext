@@ -35,19 +35,31 @@
     (:refer-clojure)
     )
 
+(def +max-float+ (.MAX_VALUE Float))
+(def +min-float+ (.MIN_VALUE Float))
+(def +max-double+ (.MAX_VALUE Double))
+(def +min-double+ (.MIN_VALUE Double))
+
 (def +max-unsigned-long+ 0xFFFFFFFFFFFFFFFF)
 (def +min-unsigned-long+ 0x00)
+
 (def +max-long+ java.lang.Long/MAX_VALUE)
 (def +min-long+ java.lang.Long/MIN_VALUE)
+
 (def +max-unsigned-integer+ 0xFFFFFFFF)
 (def +min-unsigned-integer+ 0x00)
+
 (def +max-integer+ java.lang.Integer/MAX_VALUE)
 (def +min-integer+ java.lang.Integer/MIN_VALUE)
+
 (def +max-unsigned-short+ 0xFFFF)
 (def +min-unsigned-short+ 0x00)
+
 (def +max-short+ java.lang.Short/MAX_VALUE)
 (def +min-short+ java.lang.Short/MIN_VALUE)
+
 (def +max-unsigned-byte+ 0xFF)
 (def +min-unsigned-byte+ 0x00)
+
 (def +max-byte+ java.lang.Byte/MAX_VALUE)
 (def +min-byte+ java.lang.Byte/MIN_VALUE)
