@@ -37,9 +37,71 @@
     (:refer cljext.limits) 
     )
 
+;;;; CONSTANTS
+
 (def +pi+ (.PI Math))
 (def +e+ (.E Math))
+(def +NaN+ (.NaN Double))
+(def +Inf+ (.POSITIVE_INFINITY Double))
+(def +-Inf+ (.NEGATIVE_INFINITY Double))
 
+;;;; PRIVATE
+
+(defn- ipow
+  "(ipow base exp) 
+Performs exponention if exp is positive integer. 
+
+base - numeric base to raise
+exp - integer power to raise
+
+Returns:
+base ** exp
+
+  (ipow exp)
+Performs e ** exp if exp is a positive integer
+
+exp - integer power to raise e to
+
+Returns:
+numeric"
+  ([base exp]
+   (loop [result 1
+	  count exp]
+     (if (zero? count)
+       result
+       (recur (* result base) (dec count)))))
+  ([exp]
+   (ipow +e+ exp)))
+
+(defn- round-half-up
+  ([number]
+   (if (integer? number)
+     number
+     (let [x (mod (* (abs number) 10) 10)
+	   sign (if (pos? number) 1 -1)]
+       (if (>= x 5)
+	 (* sign (ceil (abs number)))
+	 (* sign (floor (abs number))))))))
+  
+(defn- round-half-down
+  ([number]
+  (if (integer? number)
+    number
+    (let [x (mod (* (abs number) 10) 10)
+	  sign (if (pos? number) 1 -1)]
+      (if (> x 5)
+	 (* sign (ceil (abs number)))
+	 (* sign (floor (abs number))))))))
+
+
+(defn- round-even
+  ([number]
+  (if (integer? number)
+    number
+    (.rint Math number))))
+
+
+;;;; PUBLIC
 
 (defn integer
   "(integer v)
@@ -100,31 +162,6 @@ bool
        (ratio? v ))))
 
 
-(defn- ipow
-  "(ipow base exp) 
-Performs exponention if exp is positive integer. 
-
-base - numeric base to raise
-exp - integer power to raise
-
-Returns:
-base ** exp
-
-  (ipow exp)
-Performs e ** exp if exp is a positive integer
-
-exp - integer power to raise e to
-
-Returns:
-numeric"
-  ([base exp]
-   (loop [result 1
-	  count exp]
-     (if (zero? count)
-       result
-       (recur (* result base) (dec count)))))
-  ([exp]
-   (ipow +e+ exp)))
 
 (defn abs
   "(abs n) 
@@ -380,33 +417,6 @@ numeric
   ([a n]
    (- a (* n (floor (/ a n))))))
 
-(defn- round-half-up
-  ([number]
-   (if (integer? number)
-     number
-     (let [x (mod (* (abs number) 10) 10)
-	   sign (if (pos? number) 1 -1)]
-       (if (>= x 5)
-	 (* sign (ceil (abs number)))
-	 (* sign (floor (abs number))))))))
-  
-(defn- round-half-down
-  ([number]
-  (if (integer? number)
-    number
-    (let [x (mod (* (abs number) 10) 10)
-	  sign (if (pos? number) 1 -1)]
-      (if (> x 5)
-	 (* sign (ceil (abs number)))
-	 (* sign (floor (abs number))))))))
-
-
-(defn- round-even
-  ([number]
-  (if (integer? number)
-    number
-    (.rint Math number))))
-
 (defn round
   "(round number)
 Round to even
@@ -433,5 +443,4 @@ integer
 	 (= type 'half-down)
 	 (round-half-down number)
 	 (= type 'even)
-	 (round-even number)))
-  )
+	 (round-even number))))
