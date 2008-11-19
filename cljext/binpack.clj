@@ -37,7 +37,12 @@
     (:refer cljext.limits)
     )
 
+
+;;;; SPECIAL
+
 (def *endian*)
+
+;;;; CONSTANTS
 
 (def +little-endian+ 'little)
 (def +big-endian+ 'big)
@@ -56,11 +61,30 @@
   \L (list 8 +min-unsigned-long+ +max-unsigned-long+ identity)
   })
 
+;;;; PRIVATE
+
 (defn- is-endian-spec?
+  "(is-endian-spec? spec)
+Check to see if a given character is a endian specifier
+
+spec - character
+
+Returns:
+boolean
+"
   ([spec]
    (contains? #{\> \! \<} spec)))
 
 (defn- parse-endian 
+  "(parse-endian? spec)
+Return the endian based on the format string
+
+spec - character
+
+Returns:
+symbol
+"
+
   ([spec]
    (if (is-endian-spec? spec)
      (cond (or (= spec \>) (= spec \!))
@@ -69,10 +93,6 @@
 	   +little-endian+)
      +little-endian+)))
 
-;; (defn- to-bytes 
-;;   ([s]
-;;    (for [c (.getBytes (str s))]
-;;      (byte c))))
   
 (defn- from-endian
   "(from-endian bytes cast)
@@ -89,8 +109,10 @@ numeric
      (loop [bytes bytes
 	    pos 0
 	    result 0]
+       ;; convert from unsigned rep to signed if required
        (if (empty? bytes)
 	 (cast result)
+	 ;; shift each byte to proper place
 	 (let [byte (first bytes)]
 	   (let [byte (if (< byte 0) (+ byte 256) byte)]
 	     (recur (rest bytes) (inc pos) 
@@ -112,10 +134,12 @@ sequence of bytes
 	    bytes bytes
 	    result nil]
        (if (= bytes 0)
+	 ;; handle endians
 	 (cond (= *endian* +big-endian+)
 	       result
 	       (= *endian* +little-endian+)
 	       (reverse result))
+	 ;; loop bit-shifting and storing LSB
 	 (recur (bit-shift-right n 8)
 		(dec bytes)
 		(cons (bit-and n 0xFF)
@@ -151,6 +175,63 @@ string
   ([fmt]
    (if (is-endian-spec? (first fmt)) (rest fmt) fmt)))
 
+(defn- byte-array 
+  "(byte-array init)
+Create a byte array of size and values of the passed in initialization sequence
+
+init - byte sequece to initialize array
+
+Returns:
+byte[]
+"
+  ([init]
+   (let [len (count init)
+	 array (make-array (. Byte TYPE) len)] ;; create empty array
+     (loop [i (range len)
+	    init init]
+       ;; loop through init and set appropriate index to value
+       (if (empty? i)
+	 array
+	 (do
+	   (aset array (first i) (byte (first init)))
+	   (recur (rest i) (rest init))))))))
+
+
+(defn- parse-stream 
+  "(parse-stream fmt stream)
+
+Break up a stream into groups of bytes associated with each format specifier.
+
+fmt - format string
+stream - sequence of bytes
+
+Returns:
+returns list of character and byte list pairs
+"
+  ([fmt stream]
+   (loop [fmt fmt
+	  stream stream
+	  result nil]
+     (if (empty? fmt)
+       ;; end of format string
+       (reverse result)
+       (let [curfmt (first fmt)]
+	 ;; handle format character
+	 (if (contains? +conversion-table+ curfmt)
+	   ;; handle conversion table entries
+	   (let [size (first (get +conversion-table+ curfmt))]
+	     (recur (rest fmt) (drop size stream) 
+		    (cons (cons curfmt (take size stream)) result)))
+	   ;; handle special characters
+	   (cond (= curfmt \x)
+	     (recur (rest fmt) (drop 1 stream) 
+		    (cons (cons curfmt (take 1 stream)) result)))
+	   ))))))
+	   
+
+
+;;; PUBLIC 
+
 (defn pack [fmt & args]
   "(pack fmt & args)
 
@@ -158,57 +239,52 @@ fmt - a format string
 args - values to pack
 
 Returns:
-a sequence of bytes
+an array of bytes
 "
   (binding [*endian* (parse-endian (first fmt))]
+    ;; loop through format string
     (loop [fmt (without-endian-spec fmt)
 	   args args
 	   result nil]
       (if (empty? fmt)
-	(map byte result)
-	(let [c (first fmt)
-	      arg (first args)]
-	  (if (= c \x)
+	;; convert result when nothing to loop through
+	(byte-array (map byte result))
+	(let [c (first fmt) ;; format character
+	      arg (first args)] ;; argument
+	  (if (= c \x) ;; check if padding character
 	    (recur (rest fmt) args (concat result [(byte 0)]))
+	    ;; otherwise handle it from conversino table
 	    (let [[size min max & body] (get +conversion-table+ c)]
 	      (do (in-range? arg min max)
-		  (recur (rest fmt) (rest args) (concat result (to-endian arg size)))))
-		  ))))))
-
-
-
-
-(defn- parse-stream 
-  ([fmt stream]
-   (loop [fmt fmt
-	  stream stream
-	  result nil]
-     (if (empty? fmt)
-       (reverse result)
-       (let [curfmt (first fmt)]
-	 (if (contains? +conversion-table+ curfmt)
-	   (let [size (first (get +conversion-table+ curfmt))]
-	     (recur (rest fmt) (drop size stream) 
-		    (cons (cons curfmt (take size stream)) result)))
-	   (cond (= curfmt \x)
-	     (recur (rest fmt) (drop 1 stream) 
-		    (cons (cons curfmt (take 1 stream)) result)))
-))))))
-	   
-   
+		  (recur (rest fmt) (rest args) 
+			 (concat result (to-endian arg size)))
+		  ))))))))
 
 (defn unpack [fmt stream]
+  "(unpack fmt stream)
+
+fmt - a format string
+stream - a sequence of signed bytes
+
+Returns:
+a list of values parsed from stream
+"
+
   (binding [*endian* (parse-endian (first fmt))]
     (loop [stream (parse-stream (without-endian-spec fmt) stream)
 	   result []]
+      ;; loop through stream
       (if (empty? stream)
 	(reverse result)
+	;; pull data out of conversion table
 	(let [[type & bytes] (first stream)
 	      [size min max cast] (if (= type \x) 
 				    [1 0 0 int] 
 				    (get +conversion-table+ type))
 	      value (from-endian bytes cast)]
+	  ;; check if padding character
 	  (if (= type \x)
 	    (recur (rest stream) result)
+	    ;; handle standard conversion table entry
 	    (recur (rest stream) (cons value  result))))))))
 	
