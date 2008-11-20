@@ -175,27 +175,6 @@ string
   ([fmt]
    (if (is-endian-spec? (first fmt)) (rest fmt) fmt)))
 
-(defn- byte-array 
-  "(byte-array init)
-Create a byte array of size and values of the passed in initialization sequence
-
-init - byte sequece to initialize array
-
-Returns:
-byte[]
-"
-  ([init]
-   (let [len (count init)
-	 array (make-array (. Byte TYPE) len)] ;; create empty array
-     (loop [i (range len)
-	    init init]
-       ;; loop through init and set appropriate index to value
-       (if (empty? i)
-	 array
-	 (do
-	   (aset array (first i) (byte (first init)))
-	   (recur (rest i) (rest init))))))))
-
 
 (defn- parse-stream 
   "(parse-stream fmt stream)
@@ -248,7 +227,7 @@ an array of bytes
 	   result nil]
       (if (empty? fmt)
 	;; convert result when nothing to loop through
-	(byte-array (map byte result))
+	(into-array Byte/TYPE (map byte result))
 	(let [c (first fmt) ;; format character
 	      arg (first args)] ;; argument
 	  (if (= c \x) ;; check if padding character
