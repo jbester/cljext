@@ -38,6 +38,18 @@
     )
 
 
+;; Binpack is a binary packing and unpacking library similar to python's struct
+;; library.  It provides two functions that are externally exposed.  
+;;
+;;  1) Pack - takes in a format string and parameter arguments and convets
+;;            the arguments into bytes ready for output.  Signed numbers are
+;;            represented in two's compliment when negative.
+;;
+;;  2) Unpack - is the inverse of pack.  Function takes in a format string and
+;;              a sequence of bytes and converts it to a list of numbers.
+
+
+
 ;;;; SPECIAL
 
 (def *endian*)
@@ -214,11 +226,48 @@ returns list of character and byte list pairs
 (defn pack [fmt & args]
   "(pack fmt & args)
 
+Pack - takes in a format string and parameter arguments and convets
+       the arguments into array bytes ready for output.  Signed numbers 
+       are represented in two's compliment when negative.  The format is
+       specified by the format string.
+
 fmt - a format string
 args - values to pack
 
+Format strings:  
+
+Format strings consist of an optional endian specifier followed one or
+more type specifiers.
+
+> - big endian
+< - little endian (default)
+! - network endian (big endian)
+
+Type specifiers are a letter that specify the format of the appropriate 
+argument for output.
+b - signed byte
+B - unsigned byte
+h - signed short
+H - unsigned short
+i - signed int
+I - unsigned int
+l - signed long
+L - unsigned long
+x - padding byte (does not require argument)
 Returns:
 an array of bytes
+
+Examples:
+
+ (cljext.binpack/pack \">hh\" 33 -52)) => returns a byte array with contents
+                                          (0 33 -1 -52)
+
+ (cljext.binpack/pack \"<hh\" 33 -52)) => returns a byte array with contents
+                                          (33 0 -52 -1)
+
+ (cljext.binpack/pack \"<hxh\" 33 -52)) => returns a byte array with contents
+                                          (33 0 0 -52 -1)
+
 "
   (binding [*endian* (parse-endian (first fmt))]
     ;; loop through format string
@@ -247,6 +296,37 @@ stream - a sequence of signed bytes
 
 Returns:
 a list of values parsed from stream
+
+
+Format strings:  
+
+Format strings consist of an optional endian specifier followed one or
+more type specifiers.
+
+> - big endian
+< - little endian (default)
+! - network endian (big endian)
+
+Type specifiers are a letter that specify the format of the appropriate 
+argument for output.
+b - signed byte
+B - unsigned byte
+h - signed short
+H - unsigned short
+i - signed int
+I - unsigned int
+l - signed long
+L - unsigned long
+x - padding byte (does not require argument)
+
+Returns:
+an array of bytes
+
+Examples:
+
+ (cljext.binpack/unpack \"<hh\" 
+         (cljext.binpack/pack \"<hh\" 33 -52)) => (33 -52)
+
 "
 
   (binding [*endian* (parse-endian (first fmt))]
