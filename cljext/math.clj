@@ -45,6 +45,10 @@
 (def +Inf+ (.POSITIVE_INFINITY Double))
 (def +-Inf+ (.NEGATIVE_INFINITY Double))
 
+
+;;;; PUBLIC
+
+
 ;;;; PRIVATE
 
 (defn- ipow
@@ -73,25 +77,6 @@ numeric"
   ([exp]
    (ipow +e+ exp)))
 
-(defn- round-half-up
-  ([number]
-   (if (integer? number)
-     number
-     (let [x (mod (* (abs number) 10) 10)
-	   sign (if (pos? number) 1 -1)]
-       (if (>= x 5)
-	 (* sign (ceil (abs number)))
-	 (* sign (floor (abs number))))))))
-  
-(defn- round-half-down
-  ([number]
-  (if (integer? number)
-    number
-    (let [x (mod (* (abs number) 10) 10)
-	  sign (if (pos? number) 1 -1)]
-      (if (> x 5)
-	 (* sign (ceil (abs number)))
-	 (* sign (floor (abs number))))))))
 
 
 (defn- round-even
@@ -285,6 +270,20 @@ double"
   ([val]
    (.floor Math val)))
 
+(defn mod
+  "(mod a n)
+Modulo of a number with the sign of the divisor.  Similar to rem except 
+result is same sign as divisor uses Knuth's floored division
+
+a - numeric
+n - numeric
+
+returns:
+numeric
+"
+  ([a n]
+   (- a (* n (floor (/ a n))))))
+
 (defn factorial
   "(factorial n)
 Calculate the factorial
@@ -403,19 +402,25 @@ double
   ([angle]
    (.asin Math angle)))
 
-(defn mod
-  "(mod a n)
-Modulo of a number with the sign of the divisor.  Similar to rem except 
-result is same sign as divisor uses Knuth's floored division
-
-a - numeric
-n - numeric
-
-returns:
-numeric
-"
-  ([a n]
-   (- a (* n (floor (/ a n))))))
+(defn- round-half-up
+  ([number]
+   (if (integer? number)
+     number
+     (let [x (mod (* (abs number) 10) 10)
+	   sign (if (pos? number) 1 -1)]
+       (if (>= x 5)
+	 (* sign (ceil (abs number)))
+	 (* sign (floor (abs number))))))))
+  
+(defn- round-half-down
+  ([number]
+  (if (integer? number)
+    number
+    (let [x (mod (* (abs number) 10) 10)
+	  sign (if (pos? number) 1 -1)]
+      (if (> x 5)
+	 (* sign (ceil (abs number)))
+	 (* sign (floor (abs number))))))))
 
 (defn round
   "(round number)
@@ -444,3 +449,4 @@ integer
 	 (round-half-down number)
 	 (= type 'even)
 	 (round-even number))))
+

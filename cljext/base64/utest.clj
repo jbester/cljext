@@ -25,13 +25,13 @@
   (loopback +quote-2+) ;; test invertble - two pad characters
   (loopback +quote-3+ ) ;; test invertble - no pad characters
   (test-is/is
-   (= (substring (b64/encode +quote-1+) -2) "4=")) ;; test pad character is a =
+   (= (substring (b64/encode-string +quote-1+) -2) "4=")) ;; test pad character is a =
   (test-is/is
-   (= (substring (b64/encode +quote-2+) -3) "Q==")) ;; test pad two characters are ==
+   (= (substring (b64/encode-string +quote-2+) -3) "Q==")) ;; test pad two characters are ==
   (test-is/is
-   (= (substring (b64/encode +quote-3+) -4) "c3Vy")) ;; test no extra characters
+   (= (substring (b64/encode-string +quote-3+) -4) "c3Vy")) ;; test no extra characters
   (test-is/is 
-   (= (b64/encode +quote-1+) ;; test against known output
+   (= (b64/encode-string +quote-1+) ;; test against known output
       +quote-1-encoded+))
   )
 
