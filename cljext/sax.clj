@@ -177,7 +177,7 @@ methods - a vaid event followed by a function
  	   (when-not (contains? +valid-events+ event)
 	     (throw
 	      (new IllegalArgumentException 
-		   (format "%s is not a valid sax parser event" event)))))))
+		   #^String (format "%s is not a valid sax parser event" event)))))))
      
      (apply struct-map (cons handler methods)))))
 

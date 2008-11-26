@@ -173,7 +173,7 @@ true or throws exception
      true
      (throw 
       (new IllegalArgumentException 
-	   (format "Argument value %d out of range [%d, %d]" x min max))))))
+	   #^String (format "Argument value %d out of range [%d, %d]" x min max))))))
 
 (defn- without-endian-spec 
   "(without-endian-spec fmt)

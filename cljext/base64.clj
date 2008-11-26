@@ -203,4 +203,4 @@ Returns:
 decoded string 
 "
   ([string]
-   (new String (into-array Byte/TYPE (map byte (decode-string string))))))
+   (new String #^bytes (into-array Byte/TYPE (map byte (decode-string string))))))
