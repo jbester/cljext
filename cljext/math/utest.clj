@@ -293,6 +293,12 @@
   (test-is/is 
    (true? (= (math/to-radians 180) math/+pi+)))
   )
+
+
+(test-is/deftest test-summation
+  (test-is/is 
+   (true? (= (math/summation i (range 10) i) (apply + (range 10))))
+  ))
 		 
 
 
