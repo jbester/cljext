@@ -471,3 +471,24 @@ expr - expression to sum
 	    (let [~term (first ~i)]
 	      (recur (+ ~sum ~expr) (rest ~i))))))))
      
+
+
+(defmacro product
+  "(product term range expr)
+
+Perform a product of a serias
+
+term - binding for current term in range 
+range - range 
+expr - expression to multiply
+"
+  ([term range expr]
+     (let [prod (gensym)
+	   i (gensym)]
+       `(loop [~prod 1
+	       ~i ~range]
+	  (if (empty? ~i)
+	    ~prod
+	    (let [~term (first ~i)]
+	      (recur (* ~prod ~expr) (rest ~i))))))))
+     
