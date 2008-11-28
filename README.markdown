@@ -1,13 +1,16 @@
 Clojure Extended Library
 =========================
 
+Summary
+-------
+
 cljext is a library containing clojure native code and wrappers of Java 
 functions.  This provides extra functionality to pad out the clojure
 standard library.
 
 
-Packages:
-=========
+Packages
+---------
 
 cljext.binpack - Binary packing/unpacking similar to python's struct library
 cljext.math - Math functions
