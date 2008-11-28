@@ -450,3 +450,24 @@ integer
 	 (= type 'even)
 	 (round-even number))))
 
+
+
+(defmacro summation
+  "(summation term range expr)
+
+Perform a summation
+
+term - binding for current term in range 
+range - range 
+expr - expression to sum
+"
+  ([term range expr]
+     (let [sum (gensym)
+	   i (gensym)]
+       `(loop [~sum 0
+	       ~i ~range]
+	  (if (empty? ~i)
+	    ~sum
+	    (let [~term (first ~i)]
+	      (recur (+ ~sum ~expr) (rest ~i))))))))p
+     
