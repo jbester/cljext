@@ -469,5 +469,5 @@ expr - expression to sum
 	  (if (empty? ~i)
 	    ~sum
 	    (let [~term (first ~i)]
-	      (recur (+ ~sum ~expr) (rest ~i))))))))p
+	      (recur (+ ~sum ~expr) (rest ~i))))))))
      
