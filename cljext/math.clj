@@ -548,22 +548,29 @@ GCD(A,B)==GCD(B,A%B)
 			(+ (* t1 t1) (* t2 t2)))))))))
 	
 
-;;pemdas
+;; operator precedence for formula macro
 (def +precedence+
-     {'** 5,
+     {'** 6,
+      'mod 5,
       '* 4,
       '/ 3,
       '+ 2,
       '- 1})
 
-(def +highest-precedence+ 5)
+;; symbol translation for symbols in formula 
+;; (only supports binary operators)
+(def +translation-table+
+     {'** 'cljext.math/**
+      'mod 'rem})
+
+(def +highest-precedence+ (apply max (map val +precedence+)))
 
 (defn- operator?
   "Check if is valid operator"
   ([sym]
      (not (nil? (get +precedence+ sym)))))
 
-(defn find-lowest-precedence
+(defn- find-lowest-precedence
   "find the operator with lowest precedence; search from left to right"
   ([seq]
      ;; loop through terms in the sequence
@@ -585,7 +592,14 @@ GCD(A,B)==GCD(B,A%B)
 	     (recur (inc idx) (rest seq)
 		    lowest-idx lowest-prec)))))))
 
-(defn infix-to-prefix
+(defn- translate-op
+  "Translation of symbol => symbol for binary op allows for user defined operators"
+  ([op] 
+     (if (contains? +translation-table+ op)
+       (get +translation-table+ op)
+       op)))
+
+(defn- infix-to-prefix
   "Convert from infix notation to prefix notation"
   ([seq]
      (cond 
@@ -602,7 +616,8 @@ GCD(A,B)==GCD(B,A%B)
 		     op (first tl)
 		     tl (rest tl)]
 		 ;; recurse
-		 (list op (infix-to-prefix hd) (infix-to-prefix tl))))))))
+		 (list (translate-op op) (infix-to-prefix hd) (infix-to-prefix tl))))))))
+
 
 (defmacro formula
   "Formula macro translates from infix to prefix"
