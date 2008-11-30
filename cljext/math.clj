@@ -472,82 +472,6 @@ expr - expression to sum
 	      (recur (+ ~sum ~expr) (rest ~i))))))))
      
 
-
-(defmacro product
-  "(product term range expr)
-
-Perform a product of a serias
-
-term - binding for current term in range 
-range - range 
-expr - expression to multiply
-"
-  ([term range expr]
-     (let [prod (gensym)
-	   i (gensym)]
-       `(loop [~prod 1
-	       ~i ~range]
-	  (if (empty? ~i)
-	    ~prod
-	    (let [~term (first ~i)]
-	      (recur (* ~prod ~expr) (rest ~i))))))))
-     
-(defn gcd 
-  "Greatest common denominator
-
-Euclid's algorithm
-GCD(A,B)==GCD(B,A%B)
-"
-  ([a b]
-     (if (zero? b)
-       a
-       (recur b (rem a b)))))
-
-(defn lcm
-  "Least common multiple"
-  ([a b]
-     (/ (* a b) (gcd a b))))
-
-(defn nPr
-  "Permutations"
-  ([n r]
-     (/ (factorial n) (factorial (- n r)))))
-
-(defn nCr
-  "Combinations"
-  ([n r]
-     (/ (factorial n) (* (factorial r) (factorial (- n r))))))
-
-(defn mean
-  "Calculate mean"
-  ([seq]
-     (/ (apply + seq) (count seq))))
-
-(defn geometric-mean
-  "Geometric mean"
-  ([seq]
-     (** (apply * seq) (/ (count seq)))))
-
-(defn fibonacci
-  "Fibonacci sequence"
-  ([n]
-     (cond (= n 0) 0
-	   (= n 1) 1
-	   ;; Uses Djikstra's recursion
-	   ;; F(2n) = (2 F(n-1) + F(n)) * F(n)
-	   ;; F(2n-1) = F(n-1)^2 + F(n)^2
-	   true (let [limit (ceil (/ n 2))]
-		  (loop [t1 0
-			 t2 1
-			 pos 2]
-		    (if (<= pos limit)
-		      (let [tmp (+ t1 t2)]
-			(recur t2 tmp (inc pos)))
-		      (if (even? n)
-			(* (+ (* 2 t1) t2) t2)
-			(+ (* t1 t1) (* t2 t2)))))))))
-	
-
 ;; operator precedence for formula macro
 (def +precedence+
      {'** 6,
@@ -623,3 +547,80 @@ GCD(A,B)==GCD(B,A%B)
   "Formula macro translates from infix to prefix"
   ([& equation]
      (infix-to-prefix equation)))
+
+(defmacro product
+  "(product term range expr)
+
+Perform a product of a serias
+
+term - binding for current term in range 
+range - range 
+expr - expression to multiply
+"
+  ([term range expr]
+     (let [prod (gensym)
+	   i (gensym)]
+       `(loop [~prod 1
+	       ~i ~range]
+	  (if (empty? ~i)
+	    ~prod
+	    (let [~term (first ~i)]
+	      (recur (* ~prod ~expr) (rest ~i))))))))
+     
+(defn gcd 
+  "Greatest common denominator
+
+Euclid's algorithm
+GCD(A,B)==GCD(B,A%B)
+"
+  ([a b]
+     (if (zero? b)
+       a
+       (recur b (rem a b)))))
+
+(defn lcm
+  "Least common multiple"
+  ([a b]
+     (/ (* a b) (gcd a b))))
+
+(defn nPr
+  "Permutations"
+  ([n r]
+     (/ (factorial n) (factorial (- n r)))))
+
+(defn nCr
+  "Combinations"
+  ([n r]
+     (/ (factorial n) (* (factorial r) (factorial (- n r))))))
+
+(defn mean
+  "Calculate mean"
+  ([seq]
+     (/ (apply + seq) (count seq))))
+
+(defn geometric-mean
+  "Geometric mean"
+  ([seq]
+     (** (apply * seq) (/ (count seq)))))
+
+(defn fibonacci
+  "Fibonacci sequence"
+  ([n]
+     (cond (= n 0) 0
+	   (= n 1) 1
+	   ;; Uses Djikstra's recursion
+	   ;; F(2n) = (2 F(n-1) + F(n)) * F(n)
+	   ;; F(2n-1) = F(n-1)^2 + F(n)^2
+	   true (let [limit (ceil (/ n 2))]
+		  (loop [t1 0
+			 t2 1
+			 pos 2]
+		    (if (<= pos limit)
+		      (let [tmp (+ t1 t2)]
+			(recur t2 tmp (inc pos)))
+		      (if (even? n)
+			(formula (2 * t1 + t2) * t2)
+			(formula (t1 * t1) + (t2 * t2)))))))))
+
+	
+
