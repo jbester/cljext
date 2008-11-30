@@ -81,4 +81,5 @@ Converts a cl-style cond to a clojure-style cond"
   "set quoted reference to value expression"
   ([var value]
    `(dosync 
+     (ensure ~var)
      (ref-set ~var ~value))))
