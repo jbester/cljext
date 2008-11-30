@@ -308,6 +308,29 @@
   (test-is/is 
    (true? (= (math/product i (range 1 10 2) i) (apply * (range 1 10 2)))))
   )
+
+
+(test-is/deftest gcd
+  (test-is/is 
+   (true? (= (math/gcd 50 30) 10)))
+  )
+
+(test-is/deftest lcm
+  (test-is/is 
+   (true? (= (math/lcm 5 3) 15)))
+  )
+
+(test-is/deftest test-permutations
+  (test-is/is 
+   (true? (= (math/nPr 5 3) 60)))
+  )
+
+(test-is/deftest test-combinations
+  (test-is/is 
+   (true? (= (math/nCr 5 3) 10)))
+  )
+
+
 		 
 
 

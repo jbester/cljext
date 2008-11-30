@@ -492,3 +492,33 @@ expr - expression to multiply
 	    (let [~term (first ~i)]
 	      (recur (* ~prod ~expr) (rest ~i))))))))
      
+(defn gcd 
+  "Greatest common denominator
+
+Euclid's algorithm
+GCD(A,B)==GCD(B,A%B)
+"
+  ([a b]
+     (if (zero? b)
+       a
+       (recur b (rem a b)))))
+
+(defn lcm
+  "Least common multiple"
+  ([a b]
+     (/ (* a b) (gcd a b))))
+
+(defn nPr
+  "Permutations"
+  ([n r]
+     (/ (factorial n) (factorial (- n r)))))
+
+(defn nCr
+  "Combinations"
+  ([n r]
+     (/ (factorial n) (* (factorial r) (factorial (- n r))))))
+
+
+
+	 
+       
