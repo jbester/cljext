@@ -78,8 +78,6 @@ numeric"
   ([exp]
    (ipow +e+ exp)))
 
-
-
 (defn- round-even
   ([number]
   (if (integer? number)
@@ -147,8 +145,6 @@ bool
        (bigdec? v)
        (ratio? v ))))
 
-
-
 (defn abs
   "(abs n) 
 Absolute value of a number
@@ -162,7 +158,6 @@ numeric
   (if (not (neg? n))
     n
     (* -1 n)))
- 
 
 (defn **
   "(** base exp)
@@ -451,8 +446,6 @@ integer
 	 (= type 'even)
 	 (round-even number))))
 
-
-
 (defmacro summation
   "(summation term range expr)
 
@@ -491,6 +484,7 @@ expr - expression to sum
      (setq +highest-precedence+ (apply max (map val @+precedence-table+)))))
 
 
+;; == operators ==
 (defop '|| 10 'or)
 (defop '&& 20 'and)
 (defop '== 30 '=)
@@ -505,7 +499,6 @@ expr - expression to sum
 (defop '* 80)
 (defop 'mod 90 'rem)
 (defop '** 100 'cljext.math/** )
-
 
 (defn- operator?
   "Check if is valid operator"
@@ -535,7 +528,8 @@ expr - expression to sum
 		    lowest-idx lowest-prec)))))))
 
 (defn- translate-op
-  "Translation of symbol => symbol for binary op allows for user defined operators"
+  "Translation of symbol => symbol for binary op allows for
+user defined operators"
   ([op] 
      (if (contains? @+translation-table+ op)
        (get @+translation-table+ op)
