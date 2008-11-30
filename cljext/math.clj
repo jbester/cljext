@@ -604,5 +604,6 @@ GCD(A,B)==GCD(B,A%B)
 		 (list op (infix-to-prefix hd) (infix-to-prefix tl))))))))
 
 (defmacro formula
+  "Formula macro translates from infix to prefix"
   ([& equation]
      (infix-to-prefix equation)))
