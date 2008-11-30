@@ -533,14 +533,17 @@ GCD(A,B)==GCD(B,A%B)
   ([n]
      (cond (= n 0) 0
 	   (= n 1) 1
-	   true (let [limit (if (zero? (rem n 2)) (/ n 2) (/ (inc n) 2))]
+	   ;; Uses Djikstra's recursion
+	   ;; F(2n) = (2 F(n-1) + F(n)) * F(n)
+	   ;; F(2n-1) = F(n-1)^2 + F(n)^2
+	   true (let [limit (ceil (/ n 2))]
 		  (loop [t1 0
 			 t2 1
 			 pos 2]
 		    (if (<= pos limit)
 		      (let [tmp (+ t1 t2)]
 			(recur t2 tmp (inc pos)))
-		      (if (zero? (rem n 2))
+		      (if (even? n)
 			(* (+ (* 2 t1) t2) t2)
 			(+ (* t1 t1) (* t2 t2)))))))))
 		    
