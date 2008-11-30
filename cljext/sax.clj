@@ -230,12 +230,12 @@ xml - a string or an input straem
 Returns nil
 "
   ([xml]
-   (let [parser (make-reader)]
-     (.parse parser xml)))
+   (let [reader (make-reader)]
+     (.parse reader xml)))
 
   ([handler xml]
    (binding [*xml-handler* handler]
-     (let [parser (make-reader)]
-       (.parse parser xml)))))
+     (let [reader (make-reader)]
+       (.parse reader xml)))))
 
 
