@@ -33,8 +33,9 @@
 
 (ns cljext.math
     (:refer-clojure)
-    (:require [cljext.limits]) 
+    (:require [cljext.limits] [cljext.macros]) 
     (:refer cljext.limits) 
+    (:refer cljext.macros)
     )
 
 ;;;; CONSTANTS
@@ -473,27 +474,42 @@ expr - expression to sum
      
 
 ;; operator precedence for formula macro
-(def +precedence+
-     {'** 6,
-      'mod 5,
-      '* 4,
-      '/ 3,
-      '+ 2,
-      '- 1})
+(def +precedence+ (ref {}))
 
 ;; symbol translation for symbols in formula 
 ;; (only supports binary operators)
-(def +translation-table+
-     {'** 'cljext.math/**
-      'mod 'rem})
+(def +translation-table+ (ref {}))
+
+(def +highest-precedence+ (ref 0))
+
+(defn defop
+  ([op prec & [trans]]
+     (setq +precedence+ (assoc @+precedence+ op prec))
+     (when-not (nil? trans)
+       (setq +translation-table+ (assoc @+translation-table+ op trans)))
+     (setq +highest-precedence+ (apply max (map val @+precedence+)))))
 
 
-(def +highest-precedence+ (apply max (map val +precedence+)))
+(defop '|| 10 'or)
+(defop '&& 20 'and)
+(defop '== 30 '=)
+(defop '!= 30 'not=)
+(defop '< 40)
+(defop '> 40)
+(defop '<= 40)
+(defop '>= 40)
+(defop '- 50)
+(defop '+ 60)
+(defop '/ 70)
+(defop '* 80)
+(defop 'mod 90 'rem)
+(defop '** 100 'cljext.math/** )
+
 
 (defn- operator?
   "Check if is valid operator"
   ([sym]
-     (not (nil? (get +precedence+ sym)))))
+     (not (nil? (get @+precedence+ sym)))))
 
 (defn- find-lowest-precedence
   "find the operator with lowest precedence; search from left to right"
@@ -502,13 +518,13 @@ expr - expression to sum
      (loop [idx 0
 	    col col
 	    lowest-idx nil
-	    lowest-prec +highest-precedence+]
+	    lowest-prec @+highest-precedence+]
        ;; nothing left to process
        (if (empty? col)
 	 ;; return lowest found
 	 lowest-idx
 	 ;; otherwise check if current term is lower
-	 (let [prec (get +precedence+ (first col))]
+	 (let [prec (get @+precedence+ (first col))]
 	   ;; is of lower or equal precedence
 	   (if (and prec (<= prec lowest-prec))
 	     (recur (inc idx) (rest col)
@@ -520,8 +536,8 @@ expr - expression to sum
 (defn- translate-op
   "Translation of symbol => symbol for binary op allows for user defined operators"
   ([op] 
-     (if (contains? +translation-table+ op)
-       (get +translation-table+ op)
+     (if (contains? @+translation-table+ op)
+       (get @+translation-table+ op)
        op)))
 
 (defn- infix-to-prefix
