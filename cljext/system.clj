@@ -43,8 +43,8 @@ Returns:
 output of command as list of strings"
   ([cmd]
      ;; spawn process and capture output
-     (let [proc (.exec (Runtime/getRuntime) cmd)
-	   stdout (java.io.BufferedReader. (java.io.InputStreamReader. (.getInputStream proc)))]
+     (let [proc (.exec (Runtime/getRuntime) #^String cmd)
+	   stdout (java.io.BufferedReader. (java.io.InputStreamReader. (.getInputStream #^Process proc)))]
        ;; wait for completion
        (.waitFor proc)
        ;; collect output
