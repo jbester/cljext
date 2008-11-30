@@ -474,7 +474,7 @@ expr - expression to sum
      
 
 ;; operator precedence for formula macro
-(def +precedence+ (ref {}))
+(def +precedence-table+ (ref {}))
 
 ;; symbol translation for symbols in formula 
 ;; (only supports binary operators)
@@ -482,12 +482,13 @@ expr - expression to sum
 
 (def +highest-precedence+ (ref 0))
 
-(defn defop
+(defn- defop
+  "Define operators for formula macro"
   ([op prec & [trans]]
-     (setq +precedence+ (assoc @+precedence+ op prec))
+     (setq +precedence-table+ (assoc @+precedence-table+ op prec))
      (when-not (nil? trans)
        (setq +translation-table+ (assoc @+translation-table+ op trans)))
-     (setq +highest-precedence+ (apply max (map val @+precedence+)))))
+     (setq +highest-precedence+ (apply max (map val @+precedence-table+)))))
 
 
 (defop '|| 10 'or)
@@ -509,7 +510,7 @@ expr - expression to sum
 (defn- operator?
   "Check if is valid operator"
   ([sym]
-     (not (nil? (get @+precedence+ sym)))))
+     (not (nil? (get @+precedence-table+ sym)))))
 
 (defn- find-lowest-precedence
   "find the operator with lowest precedence; search from left to right"
@@ -524,7 +525,7 @@ expr - expression to sum
 	 ;; return lowest found
 	 lowest-idx
 	 ;; otherwise check if current term is lower
-	 (let [prec (get @+precedence+ (first col))]
+	 (let [prec (get @+precedence-table+ (first col))]
 	   ;; is of lower or equal precedence
 	   (if (and prec (<= prec lowest-prec))
 	     (recur (inc idx) (rest col)
@@ -553,11 +554,11 @@ expr - expression to sum
 	     (if (nil? lowest) ;; nothing to split
 	       col
 	       ;; (a b c) bind a to hd, c to tl, and b to op
-	       (let [[hd tl] (split-at lowest col)
-		     op (first tl)
-		     tl (rest tl)]
+	       (let [[hd [op & tl]] (split-at lowest col)]
 		 ;; recurse
-		 (list (translate-op op) (infix-to-prefix hd) (infix-to-prefix tl))))))))
+		 (list (translate-op op)
+		       (infix-to-prefix hd) 
+		       (infix-to-prefix tl))))))))
 
 (defmacro formula
   "Formula macro translates from infix to prefix"
