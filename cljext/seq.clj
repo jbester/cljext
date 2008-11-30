@@ -85,3 +85,17 @@ e.g. (map* vector '(1 2) '(3 4 5)) => ([1 3] [2 4] [nil 5])
   "Count number of occurances in a list of specified item"
   ([item col]
      (count-if (fn [i] (= i item)) col)))
+
+(defn member? 
+  "Test for membership in a list"
+  ([el seq pred]
+   (loop [seq seq]
+     (let [hd (first seq)]
+       (cond (empty? seq)
+	     false
+	     (pred el hd)
+	     hd
+	     true
+	     (recur (rest seq))))))
+  ([el seq]
+   (member? el seq =)))
