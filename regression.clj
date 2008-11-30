@@ -31,6 +31,16 @@
 ;; SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(binding [*warn-on-reflection* true]
+  (require 'cljext.math)
+  (require 'cljext.binpack)
+  (require 'cljext.base64)
+  (require 'cljext.limits)
+  (require 'cljext.seq)
+  (require 'cljext.sax)
+  (require 'cljext.macros)
+  (require 'cljext.system))
+
 (require 'cljext.math.utest)
 (require 'cljext.binpack.utest)
 (require 'cljext.base64.utest)
