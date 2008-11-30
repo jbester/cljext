@@ -18,4 +18,5 @@ Packages
  + cljext.math - Math functions/macros
  + cljext.sax - Simple Sax parser 
  + cljext.seq - Sequence functions/macros parser 
+ + cljext.str - String functions
  + cljext.system - system interface 
