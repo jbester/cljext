@@ -1,6 +1,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; File     : regression.clj
-;; Function : regression test
+;; File     : str.clj
+;; Function : String library
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Send comments or questions to code at freshlime dot org
 ;; $Id$
@@ -31,18 +31,16 @@
 ;; SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(binding [*warn-on-reflection* true]
-  (require 'cljext.math)
-  (require 'cljext.binpack)
-  (require 'cljext.base64)
-  (require 'cljext.limits)
+(ns cljext.str
+  (:refer-clojure))
 
-  (require 'cljext.sax)
-  (require 'cljext.seq)
-  (require 'cljext.str)
-  (require 'cljext.macros)
-  (require 'cljext.system))
-
-(require 'cljext.math.utest)
-(require 'cljext.binpack.utest)
-(require 'cljext.base64.utest)
+(defn chomp
+  "Remove \r\n \n or \r line endings from string and return it"
+  ([#^String str]
+     (let [len (count str)]
+       (cond (.endsWith str "\r\n")
+	     (.substring str 0 (- len 2))
+	     (or (.endsWith str "\n") (.endsWith str "\r"))
+       	     (.substring str 0 (dec len))
+	     true
+	     str))))
