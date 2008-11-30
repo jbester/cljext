@@ -55,3 +55,30 @@
 			  (for [sym syms]
 			    `(~sym (gensym)))))
 	~@body)))
+
+(defmacro cl-style-let*
+  "(cl-style-let* ((v1 exp1) (v2 exp2)) & body)
+Converts a cl-style let* to a clojure-style let"
+  ([terms & body]
+   `(let [~@(apply concat terms)]
+      ~@body)))
+
+(defmacro cl-style-let
+  "(cl-style-let ((v1 exp1) (v2 exp2)) & body)
+Converts a cl-style let to clojure"
+  ([terms & body]
+     (let [vars (map first terms)
+	   exprs (map rest terms)]
+       `((fn [~@vars] ~@body) ~@(for [e exprs] `(do ~@e))))))
+
+(defmacro cl-style-cond 
+  "(cl-style-cond (test1 expr1) (test2 exp2) ... )
+Converts a cl-style cond to a clojure-style cond"
+  ([& conditions]
+   `(cond ~@(apply concat conditions))))
+
+(defmacro setq
+  "set quoted reference to value expression"
+  ([var value]
+   `(dosync 
+     (ref-set ~var ~value))))
