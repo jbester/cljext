@@ -487,6 +487,7 @@ expr - expression to sum
      {'** 'cljext.math/**
       'mod 'rem})
 
+
 (def +highest-precedence+ (apply max (map val +precedence+)))
 
 (defn- operator?
@@ -496,24 +497,24 @@ expr - expression to sum
 
 (defn- find-lowest-precedence
   "find the operator with lowest precedence; search from left to right"
-  ([seq]
-     ;; loop through terms in the sequence
+  ([col]
+     ;; loop through terms in the coluence
      (loop [idx 0
-	    seq seq
+	    col col
 	    lowest-idx nil
 	    lowest-prec +highest-precedence+]
        ;; nothing left to process
-       (if (empty? seq)
+       (if (empty? col)
 	 ;; return lowest found
 	 lowest-idx
 	 ;; otherwise check if current term is lower
-	 (let [prec (get +precedence+ (first seq))]
+	 (let [prec (get +precedence+ (first col))]
 	   ;; is of lower or equal precedence
 	   (if (and prec (<= prec lowest-prec))
-	     (recur (inc idx) (rest seq)
+	     (recur (inc idx) (rest col)
 		    idx prec)
 	     ;; is of high precedence therefore skip for now
-	     (recur (inc idx) (rest seq)
+	     (recur (inc idx) (rest col)
 		    lowest-idx lowest-prec)))))))
 
 (defn- translate-op
@@ -525,23 +526,22 @@ expr - expression to sum
 
 (defn- infix-to-prefix
   "Convert from infix notation to prefix notation"
-  ([seq]
+  ([col]
      (cond 
       ;; handle term only
-      (not (seq? seq)) seq
+      (not (seq? col)) col
       ;; handle sequence containing one term (i.e. handle parens)
-      (= (count seq) 1) (infix-to-prefix (first seq))
+      (= (count col) 1) (infix-to-prefix (first col))
       ;; handle all other cases
-      true (let [lowest (find-lowest-precedence seq)]
+      true (let [lowest (find-lowest-precedence col)]
 	     (if (nil? lowest) ;; nothing to split
-	       seq
+	       col
 	       ;; (a b c) bind a to hd, c to tl, and b to op
-	       (let [[hd tl] (split-at lowest seq)
+	       (let [[hd tl] (split-at lowest col)
 		     op (first tl)
 		     tl (rest tl)]
 		 ;; recurse
 		 (list (translate-op op) (infix-to-prefix hd) (infix-to-prefix tl))))))))
-
 
 (defmacro formula
   "Formula macro translates from infix to prefix"
@@ -595,13 +595,13 @@ GCD(A,B)==GCD(B,A%B)
 
 (defn mean
   "Calculate mean"
-  ([seq]
-     (/ (apply + seq) (count seq))))
+  ([col]
+     (/ (apply + col) (count col))))
 
 (defn geometric-mean
   "Geometric mean"
-  ([seq]
-     (** (apply * seq) (/ (count seq)))))
+  ([col]
+     (** (apply * col) (/ (count col)))))
 
 (defn fibonacci
   "Fibonacci sequence"
