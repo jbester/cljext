@@ -591,8 +591,8 @@ GCD(A,B)==GCD(B,A%B)
      (cond 
       ;; handle term only
       (not (seq? seq)) seq
-      ;; handle sequence containing only one term
-      (= (count seq) 1) (first seq)
+      ;; handle sequence containing one term (i.e. handle parens)
+      (= (count seq) 1) (infix-to-prefix (first seq))
       ;; handle all other cases
       true (let [lowest (find-lowest-precedence seq)]
 	     (if (nil? lowest) ;; nothing to split
