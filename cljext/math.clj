@@ -601,6 +601,7 @@ GCD(A,B)==GCD(B,A%B)
 	       (let [[hd tl] (split-at lowest seq)
 		     op (first tl)
 		     tl (rest tl)]
+		 ;; recurse
 		 (list op (infix-to-prefix hd) (infix-to-prefix tl))))))))
 
 (defmacro formula
