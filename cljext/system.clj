@@ -68,3 +68,7 @@ output of command as list of strings"
 (defn gc
   ([]
      (System/gc)))
+
+(defn sleep
+  ([ms]
+     (Thread/sleep ms)))
