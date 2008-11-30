@@ -88,14 +88,14 @@ e.g. (map* vector '(1 2) '(3 4 5)) => ([1 3] [2 4] [nil 5])
 
 (defn member? 
   "Test for membership in a list"
-  ([el seq pred]
-   (loop [seq seq]
-     (let [hd (first seq)]
-       (cond (empty? seq)
+  ([el col pred]
+   (loop [col col]
+     (let [[hd & tl] col]
+       (cond (empty? col)
 	     false
 	     (pred el hd)
 	     hd
 	     true
-	     (recur (rest seq))))))
-  ([el seq]
-   (member? el seq =)))
+	     (recur tl)))))
+  ([el col]
+   (member? el col =)))
