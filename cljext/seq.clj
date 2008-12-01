@@ -99,3 +99,17 @@ e.g. (map* vector '(1 2) '(3 4 5)) => ([1 3] [2 4] [nil 5])
 	     (recur tl)))))
   ([el col]
    (member? el col =)))
+
+
+(defn positions
+  "Return the list of positions where a given element resides"
+  ([el col]
+     (loop [col (enumerate col)
+	    result nil]
+       (let [[idx elem] (first col)]
+	 (if (empty? col)
+	   (reverse result)
+	   (recur (rest col)
+		  (if (= elem el) (cons idx result) result)))))))
+	   
+       
