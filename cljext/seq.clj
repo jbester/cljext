@@ -113,3 +113,8 @@ e.g. (map* vector '(1 2) '(3 4 5)) => ([1 3] [2 4] [nil 5])
 		  (if (= elem el) (cons idx result) result)))))))
 	   
        
+(defn list-tabulate
+  "Create a list by calling the provided func with the position as a parameter"
+  ([n func]
+     (for [i (range n)]
+       (func i))))
