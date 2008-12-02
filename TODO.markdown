@@ -5,7 +5,6 @@ New Modules planned:
  + Hash/checksum library (SHA1, CRC32, MD5, etc)
 
 Thinking about it:
- + utility module common macros/functions (e.g. switch) ; prefer not to do this unless writing other modules becomes syntactically hard
  + Network modues:
   + sockets 
   + network protocol implementations (HTTP/SMTP/POP/IMAP) may overlap or require J2EE
@@ -15,8 +14,9 @@ Thinking about it:
   + mime encoding/decoding
   + Wrapper/front end to HD5 (ala pytables may be difficult do to soft typing)
  + Wrappers
-  + Wrapper for apache commons IO 
-  + Wrapper for apache commons calendar/date functions
+  + apache commons IO 
+  + apache commons calendar/date functions
+  + apache Math and/or Jama
  + lex/yacc port (seperate project?)
 
 
