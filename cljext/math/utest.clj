@@ -340,6 +340,15 @@
 				987 1597 2584 4181 6765)))))
 
 
+(test-is/deftest test-mean
+  (test-is/is 
+   (true? (= (math/mean '(10 4 3)) (/ (+ 10 4 3) 3))))
+  )
+
+(test-is/deftest test-geometric-mean
+  (test-is/is 
+   (true? (= (cljext.math/geometric-mean (list 1 1.04 1.0816)) 1.04)))
+  )
 
 (test-is/run-tests)
 
