@@ -59,6 +59,18 @@ e.g. (map* vector '(1 2) '(3 4 5)) => ([1 3] [2 4] [nil 5])
   ([& cols]
      (apply map* vector cols)))
 
+(defn lazy-zip
+  "A lazy version of zip"
+  ([& cols]
+     (when (every? not-empty cols)
+       (lazy-cons (map first cols) (apply lazy-zip (map rest cols))))))
+
+(defn lazy-zip*
+  "A lazy version of zip*"
+  ([& cols]
+     (when (some not-empty cols)
+       (lazy-cons (map first cols) (apply lazy-zip* (map rest cols))))))
+
 (defn unzip 
   "Unzip one list into a list of lists"
   ([col] 
