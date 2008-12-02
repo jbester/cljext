@@ -609,6 +609,11 @@ GCD(A,B)==GCD(B,A%B)
   ([col]
      (/ (apply + col) (count col))))
 
+(defn sum
+  "Sum a series"
+  ([col]
+     (apply + col)))
+
 (defn geometric-mean
   "Geometric mean"
   ([col]
