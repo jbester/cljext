@@ -68,7 +68,7 @@ e.g. (map* vector '(1 2) '(3 4 5)) => ([1 3] [2 4] [nil 5])
 (defn enumerate 
   "Enumerate a list e.g. '(a b c d) => '([0 a] [1 b] [2 c] [3 d])"
   ([col] 
-     (zip (range (count col)) col)))
+     (zip (iterate inc 0) col)))
 
 (defn count-if
   "Count number of times predicate true in a list"
