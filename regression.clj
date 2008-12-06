@@ -47,3 +47,4 @@
 (require 'cljext.math.utest)
 (require 'cljext.binpack.utest)
 (require 'cljext.base64.utest)
+(require 'cljext.seq.utest)
