@@ -40,6 +40,7 @@
   (require 'cljext.sax)
   (require 'cljext.seq)
   (require 'cljext.str)
+  (require 'cljext.hash)
   (require 'cljext.macros)
   (require 'cljext.system))
 
