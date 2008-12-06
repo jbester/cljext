@@ -1,8 +1,7 @@
 Modifications to existing modules:
  + base64 encode/decode for streams and/or files
  + update XML sax parser clojure interface
-New Modules planned:
- + Hash/checksum library (SHA1, CRC32, MD5, etc)
+ + add CRCs to hash
 
 Thinking about it:
  + Network modues:
