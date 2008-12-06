@@ -38,14 +38,15 @@
 ;; user> (md5 (.getBytes "Hello world"))
 ;; nil
 ;; user> (hash-to-string (md5))
-;; "3E2596A79DBC69B674CD4EC67A72C62"
+;; "3E25960A79DBC69B674CD4EC67A72C62"
 
 (ns cljext.hash
   (:refer-clojure)
   (:require [cljext.macros] [cljext.seq])
   (:import [java.security.MessageDigest]
-	   [java.util.zip.CRC32]
-	   [java.util.zip.Adler32]))
+	   [java.io FileInputStream]
+	   [java.util.zip CRC32 Adler32]))
+
 
 ;; supported hash algorithms
 
@@ -61,7 +62,8 @@ of message digest"
      (str hash)))
 
 
-(defn make-hasher
+(defn- make-hasher
+  "Create appropriate class based on algorithm symbol"
   ([algorithm]
      (cond (cljext.seq/member? algorithm +digest-algorithms+)
 	   (java.security.MessageDigest/getInstance (hash-name algorithm))
@@ -70,6 +72,28 @@ of message digest"
 	   (= algorithm 'Adler32)
 	   (java.util.zip.Adler32.))))
 
+
+
+(defn hash-file
+  ([#^String filename algorithm & [buffer-size]]
+     ;; create hasher and buffers
+     (let [hash (create-hash algorithm)
+	   buffer-size (if buffer-size buffer-size 1024)
+	   buffer (make-array Byte/TYPE buffer-size)]
+       ;; loop through file reading data from input
+       (with-open [inp (java.io.FileInputStream. filename)]
+	 (loop [rd (.read inp buffer)] 
+	   ;; check if eof
+	     (if (= rd -1)
+	       (hash)
+	       (do
+		 ;; hash what was read and loop again
+		 (hash (if (= rd buffer-size)
+			  buffer
+			  (subvec (apply vector (seq buffer)) 0 rd)))
+		 (recur (.read inp buffer)))))))))
+	   
+	   
 (defn create-hash
   "Create a hash for a given algorithm
 
@@ -100,7 +124,7 @@ reset the hash algorithm to no input
 (defn- num->hex
   "Convert from base 10 to base 16"
   ([num]
-     (format "%X" num)))
+     (format "%02X" num)))
 
 (defn hash-to-string
   "Convert from byte array to string of hex digits"
