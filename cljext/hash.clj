@@ -50,10 +50,22 @@
 
 ;; supported hash algorithms
 
+(def +CRC32+ 'CRC32)
+(def +Adler32+ 'Adler32)
+(def +SHA1+ 'SHA1)
+(def +MD2+ 'MD2)
+(def +MD5+ 'MD5)
+(def +SHA256+ 'SHA256)
+(def +SHA384+ 'SHA384)
+(def +SHA512+ 'SHA512)
+
 ;; for internal use only
-(def +digest-algorithms+ '(SHA1 MD2 MD5 SHA256 SHA384 SHA512))
+(def +digest-algorithms+ (list +SHA1+ +MD2+ +MD5+ +SHA256+ +SHA384+ +SHA512+))
 ;; valid algoirhtms
-(def +hash-algorithms+ '(CRC32 Adler32 SHA1 MD2 MD5 SHA256 SHA384 SHA512))
+(def +hash-algorithms+ (list +CRC32+ +Adler32+ +SHA1+ +MD2+ +MD5+ +SHA256+ +SHA384+ +SHA512+))
+
+
+
 
 (defn- hash-name
   "Convert from hash algorithm symbol to name required by getInstance 
@@ -75,6 +87,15 @@ of message digest"
 
 
 (defn hash-file
+  "Hash a file 
+
+filename - path as a String
+algorithm - algorithm to use as a symbol (e.g. 'CRC32)
+buffer-size - (optional) size of buffer to use default is 1KB
+
+Returns:
+Hash as seq of bytes
+"
   ([#^String filename algorithm & [buffer-size]]
      ;; create hasher and buffers
      (let [hash (create-hash algorithm)
