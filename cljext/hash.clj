@@ -85,11 +85,15 @@ of message digest"
 	   (= algorithm 'Adler32)
 	   (java.util.zip.Adler32.))))
 
+(defn bit-shift-right-and-mask
+  ([v n mask]
+     (bit-and (bit-shift-right v n) mask)))
+
 (defn- digest-checksum
   ([hasher]
      (let [value (.getValue #^java.util.zip.Checksum hasher)]
        (.reset #^java.util.zip.Checksum hasher)
-       [value])))
+       [(bit-shift-right-and-mask value 24 0xFF) (bit-shift-right-and-mask value 16 0xFF) (bit-shift-right-and-mask value 8 0xFF) (bit-shift-right-and-mask value 0 0xFF)])))
 
 (defn- make-checksum-fn
   ([hasher]
@@ -98,8 +102,8 @@ of message digest"
 	  (digest-checksum hasher))
        ([bytes]
 	  (if (seq? bytes)
-	    (.update #^java.util.zip.Checksum hasher (into-array Byte/TYPE (map byte bytes)))
-	    (.update #^java.util.zip.Checksum hasher bytes))))))
+	    (.update hasher #^"[B" (into-array Byte/TYPE (map byte bytes)))
+	    (.update hasher #^"[B" bytes))))))
 
 
 (defn- make-digest-fn
@@ -109,7 +113,6 @@ of message digest"
 	  (.digest #^java.security.MessageDigest hasher))
        ([bytes]
 	  (if (seq? bytes)
-	    
 	    (.update #^java.security.MessageDigest hasher #^bytes (into-array Byte/TYPE (map byte bytes)))
 	    (.update #^java.security.MessageDigest hasher #^bytes bytes))))))
       

@@ -44,7 +44,9 @@
   (require 'cljext.macros)
   (require 'cljext.system))
 
-(require 'cljext.math.utest)
+
 (require 'cljext.binpack.utest)
 (require 'cljext.base64.utest)
+(require 'cljext.hash.utest)
+(require 'cljext.math.utest)
 (require 'cljext.seq.utest)
