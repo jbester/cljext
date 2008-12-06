@@ -59,13 +59,14 @@
 (def +SHA384+ 'SHA384)
 (def +SHA512+ 'SHA512)
 
-;; for internal use only
-(def +digest-algorithms+ (list +SHA1+ +MD2+ +MD5+ +SHA256+ +SHA384+ +SHA512+))
-;; valid algoirhtms
-(def +hash-algorithms+ (list +CRC32+ +Adler32+ +SHA1+ +MD2+ +MD5+ +SHA256+ +SHA384+ +SHA512+))
+(defn- is-checksum?
+  ([algo]
+     (or (= algo +CRC32+) (= algo +Adler32+))))
 
-
-
+(defn- is-digest?
+  "Internally used to check if algorithm is supported by java's digest message class"
+  ([algo]
+     (not (is-checksum? algo))))
 
 (defn- hash-name
   "Convert from hash algorithm symbol to name required by getInstance 
@@ -77,13 +78,63 @@ of message digest"
 (defn- make-hasher
   "Create appropriate class based on algorithm symbol"
   ([algorithm]
-     (cond (cljext.seq/member? algorithm +digest-algorithms+)
+     (cond (is-digest? algorithm)
 	   (java.security.MessageDigest/getInstance (hash-name algorithm))
 	   (= algorithm 'CRC32)
 	   (java.util.zip.CRC32.)
 	   (= algorithm 'Adler32)
 	   (java.util.zip.Adler32.))))
 
+(defn- digest-checksum
+  ([hasher]
+     (let [value (.getValue #^java.util.zip.Checksum hasher)]
+       (.reset #^java.util.zip.Checksum hasher)
+       [value])))
+
+(defn- make-checksum-fn
+  ([hasher]
+     (fn 
+       ([]
+	  (digest-checksum hasher))
+       ([bytes]
+	  (if (seq? bytes)
+	    (.update #^java.util.zip.Checksum hasher (into-array Byte/TYPE (map byte bytes)))
+	    (.update #^java.util.zip.Checksum hasher bytes))))))
+
+
+(defn- make-digest-fn
+  ([hasher]
+     (fn 
+       ([]
+	  (.digest #^java.security.MessageDigest hasher))
+       ([bytes]
+	  (if (seq? bytes)
+	    
+	    (.update #^java.security.MessageDigest hasher #^bytes (into-array Byte/TYPE (map byte bytes)))
+	    (.update #^java.security.MessageDigest hasher #^bytes bytes))))))
+      
+
+
+(defn create-hash
+  "Create a hash for a given algorithm
+
+Takes an algorithm as defined in +valid-algorithms+
+
+Returns a function that takes either one or zero parameters.
+
+If given one parameter a byte sequence the function will continue 
+processing using the digest algorithm the sequence.
+
+If given no parameters will return the hash as an array of bytes AND 
+reset the hash algorithm to no input
+"
+  ([algorithm]
+     (let [hasher
+	   (make-hasher algorithm)]
+       (when hasher
+	 (if (is-digest? algorithm)
+	   (make-digest-fn hasher)
+	   (make-checksum-fn hasher))))))
 
 
 (defn hash-file
@@ -115,32 +166,6 @@ Hash as seq of bytes
 		 (recur (.read inp buffer)))))))))
 	   
 	   
-(defn create-hash
-  "Create a hash for a given algorithm
-
-Takes an algorithm as defined in +valid-algorithms+
-
-Returns a function that takes either one or zero parameters.
-
-If given one parameter a byte sequence the function will continue 
-processing using the digest algorithm the sequence.
-
-If given no parameters will return the hash as an array of bytes AND 
-reset the hash algorithm to no input
-"
-  ([algorithm]
-     (let [hasher
-	   (make-hasher algorithm)]
-       (when hasher
-	 (fn 
-	   ([]
-	      (if (or (= algorithm 'CRC32) (= algorithm 'Adler32))
-		(let [value (.getValue hasher)]
-		  (.reset hasher)
-		  [value])
-		(.digest hasher)))
-	   ([bytes]
-	      (.update hasher (into-array Byte/TYPE (map byte bytes)))))))))
 
 (defn- num->hex
   "Convert from base 10 to base 16"
