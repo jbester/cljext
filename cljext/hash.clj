@@ -43,16 +43,32 @@
 (ns cljext.hash
   (:refer-clojure)
   (:require [cljext.macros] [cljext.seq])
-  (:import [java.security.MessageDigest]))
+  (:import [java.security.MessageDigest]
+	   [java.util.zip.CRC32]
+	   [java.util.zip.Adler32]))
 
 ;; supported hash algorithms
-(def +hash-algorithms+ '(SHA1 MD2 MD5 SHA256 SHA384 SHA512))
+
+;; for internal use only
+(def +digest-algorithms+ '(SHA1 MD2 MD5 SHA256 SHA384 SHA512))
+;; valid algoirhtms
+(def +hash-algorithms+ '(CRC32 Adler32 SHA1 MD2 MD5 SHA256 SHA384 SHA512))
 
 (defn- hash-name
   "Convert from hash algorithm symbol to name required by getInstance 
 of message digest"
   ([hash] 
      (str hash)))
+
+
+(defn make-hasher
+  ([algorithm]
+     (cond (cljext.seq/member? algorithm +digest-algorithms+)
+	   (java.security.MessageDigest/getInstance (hash-name algorithm))
+	   (= algorithm 'CRC32)
+	   (java.util.zip.CRC32.)
+	   (= algorithm 'Adler32)
+	   (java.util.zip.Adler32.))))
 
 (defn create-hash
   "Create a hash for a given algorithm
@@ -68,12 +84,16 @@ If given no parameters will return the hash as an array of bytes AND
 reset the hash algorithm to no input
 "
   ([algorithm]
-     (when (cljext.seq/member? algorithm +hash-algorithms+)
-       (let [hasher
-	     (java.security.MessageDigest/getInstance (hash-name algorithm))]
+     (let [hasher
+	   (make-hasher algorithm)]
+       (when hasher
 	 (fn 
 	   ([]
-	      (.digest hasher))
+	      (if (or (= algorithm 'CRC32) (= algorithm 'Adler32))
+		(let [value (.getValue hasher)]
+		  (.reset hasher)
+		  [value])
+		(.digest hasher)))
 	   ([bytes]
 	      (.update hasher (into-array Byte/TYPE (map byte bytes)))))))))
 
@@ -81,7 +101,6 @@ reset the hash algorithm to no input
   "Convert from base 10 to base 16"
   ([num]
      (format "%X" num)))
-
 
 (defn hash-to-string
   "Convert from byte array to string of hex digits"
