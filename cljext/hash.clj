@@ -31,14 +31,26 @@
 ;; SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+
+;; Example:
+;; user> (def md5 (create-hash 'MD5))
+;; #'user/md5
+;; user> (md5 (.getBytes "Hello world"))
+;; nil
+;; user> (hash-to-string (md5))
+;; "3E2596A79DBC69B674CD4EC67A72C62"
+
 (ns cljext.hash
   (:refer-clojure)
   (:require [cljext.macros] [cljext.seq])
   (:import [java.security.MessageDigest]))
 
+;; supported hash algorithms
 (def +hash-algorithms+ '(SHA1 MD2 MD5 SHA256 SHA384 SHA512))
 
 (defn- hash-name
+  "Convert from hash algorithm symbol to name required by getInstance 
+of message digest"
   ([hash] 
      (str hash)))
 
@@ -66,10 +78,13 @@ reset the hash algorithm to no input
 	      (.update hasher (into-array Byte/TYPE (map byte bytes)))))))))
 
 (defn- num->hex
+  "Convert from base 10 to base 16"
   ([num]
      (format "%X" num)))
 
+
 (defn hash-to-string
+  "Convert from byte array to string of hex digits"
   ([hash]
      (apply str (map num->hex hash))))
 
