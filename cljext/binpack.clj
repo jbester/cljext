@@ -33,8 +33,10 @@
 
 (ns cljext.binpack
     (:refer-clojure)
-    (:require [cljext.limits])
+    (:require [cljext.limits]
+	      [cljext.macros])
     (:refer cljext.limits)
+    (:refer cljext.macros)
     )
 
 
@@ -56,11 +58,11 @@
 
 ;;;; CONSTANTS
 
-(def +little-endian+ 'little)
-(def +big-endian+ 'big)
+(def- +little-endian+ 'little)
+(def- +big-endian+ 'big)
 
 
-(def +conversion-table+
+(def- +conversion-table+
   {
   ;; spec char (size min max cast) (cast is needed for creating signed values)
   \b (list 1 +min-byte+ +max-byte+ byte),

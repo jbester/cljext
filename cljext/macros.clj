@@ -87,6 +87,8 @@ Converts a cl-style cond to a clojure-style cond"
 
 (defmacro with-default-values
   "Binds a default-value to a variable if one doesn't already exist
+typically used when using optional parameters and need a default value
+but don't want to use a keyword argument
 
  (let [a 3] (println a)) => (let [a (if (nil? a) 3 a)] (println a))
 "
@@ -99,4 +101,7 @@ Converts a cl-style cond to a clojure-style cond"
        `(let [~@(cljext.seq/flatten-1 var-bindings)]
 	  ~@body))))
 		      
-  
+(defmacro def-
+  "Define a private variabe"
+  ([var & [val]]
+     `(def ~(with-meta var (assoc (meta var) :private true)) ~val)))
