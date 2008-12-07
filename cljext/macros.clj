@@ -99,4 +99,7 @@ Converts a cl-style cond to a clojure-style cond"
        `(let [~@(cljext.seq/flatten-1 var-bindings)]
 	  ~@body))))
 		      
-  
+(defmacro def-
+  "Define a private variabe"
+  ([var & [val]]
+     `(def ~(with-meta var (assoc (meta var) :private true)) ~val)))
