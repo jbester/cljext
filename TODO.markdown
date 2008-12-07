@@ -1,7 +1,5 @@
 Modifications to existing modules:
- + base64 encode/decode for streams and/or files
  + update XML sax parser clojure interface
- + add CRCs to hash
 
 Thinking about it:
  + Network modues:
@@ -17,7 +15,3 @@ Thinking about it:
   + apache commons calendar/date functions
   + apache Math and/or Jama
  + lex/yacc port (seperate project?)
-
-
-
-  

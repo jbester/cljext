@@ -136,13 +136,16 @@ true
        ;; loop through files reading from one and writing to the other
        (let [buffer-size (if buffer-size buffer-size 1020)
 	     buffer (make-array Byte/TYPE buffer-size)]
+	 ;; looping 
 	 (loop [rd (.read inp buffer)]
 	   (if (= rd -1)
 	     true
 	     (do
+	       ;; write to output file 
 	       (if (= rd buffer-size)
 		 (.write outp (.getBytes (encode-string buffer)))
 		 (.write outp (.getBytes (encode-string  (subvec (apply vector (seq buffer)) 0 rd)))))
+	       ;; keep looping
 	       (recur (.read inp buffer)))))))))
 
 
