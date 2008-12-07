@@ -92,6 +92,9 @@ list of list of 4 base64 encoded characters
      (encode-triplet a b c))))
 
 
+
+	       
+
 (defn encode-string
   "(encode binary)
 
@@ -116,6 +119,32 @@ string base64 encoded
 	   bytes (apply concat (drop-last 1 bytes))]
        ;; convert to a string
        (apply str (concat bytes end-byte))))))
+
+(defn encode-file
+  "Encode a file in base64 and output to a given file
+
+in-file-name - a string path for the input file name
+out-file-name - a string path for the output file name
+buffer-size - size of a buffer must be a multiple of 3
+
+Returns:
+true
+"
+  ([in-file-name out-file-name & [buffer-size]]
+     (with-open [inp (java.io.FileInputStream. in-file-name)
+		 outp (java.io.FileOutputStream. out-file-name)]
+       ;; loop through files reading from one and writing to the other
+       (let [buffer-size (if buffer-size buffer-size 1020)
+	     buffer (make-array Byte/TYPE buffer-size)]
+	 (loop [rd (.read inp buffer)]
+	   (if (= rd -1)
+	     true
+	     (do
+	       (if (= rd buffer-size)
+		 (.write outp (.getBytes (encode-string buffer)))
+		 (.write outp (.getBytes (encode-string  (subvec (apply vector (seq buffer)) 0 rd)))))
+	       (recur (.read inp buffer)))))))))
+
 
 (defn- decode-bytes
   "(decode-bytes bits c)
@@ -197,7 +226,7 @@ list of bytes
 
 decode a base64 string as a string
 
-string - base 64 encoded string
+ string - base 64 encoded string
 
 Returns:
 decoded string 
