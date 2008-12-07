@@ -32,7 +32,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (ns cljext.macros
-  (:refer-clojure))
+  (:refer-clojure)
+  (:require [cljext.seq]))
 
 (defmacro switch
   "Switch similar to code e.g. (switch 'a 'b (print 'b) 'c (print 'c) :default (print 'default))"
@@ -83,3 +84,19 @@ Converts a cl-style cond to a clojure-style cond"
    `(dosync 
      (ensure ~var)
      (ref-set ~var ~value))))
+
+(defmacro with-default-values
+  "Binds a default-value to a variable if one doesn't already exist
+
+ (let [a 3] (println a)) => (let [a (if (nil? a) 3 a)] (println a))
+"
+  ([var-bindings & body]
+     (let [var-bindings (partition 2 var-bindings)
+	   var-bindings (map (fn [[var binding]]
+			       `(~var (if (nil? ~var) ~binding ~var)))
+			     var-bindings)]
+
+       `(let [~@(cljext.seq/flatten-1 var-bindings)]
+	  ~@body))))
+		      
+  

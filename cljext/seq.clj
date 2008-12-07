@@ -130,3 +130,15 @@ e.g. (map* vector '(1 2) '(3 4 5)) => ([1 3] [2 4] [nil 5])
   ([n func]
      (for [i (range n)]
        (func i))))
+
+(defn flatten-1
+  "Flatten the list but only up to the depth of one"
+  ([col]
+     (with-local-vars [result nil]
+       (doseq [term col]
+	 (if (seq? term)
+	   (var-set result (concat @result term))
+	   (var-set result (concat @result (list term)))))
+	 @result)))
+		 
+	 
