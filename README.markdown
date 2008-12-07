@@ -17,6 +17,7 @@ Packages
  + cljext.limits - Maximum and minimum of java numeric types
  + cljext.macros - General control flow macros
  + cljext.math - Math functions/macros
+ + cljext.option - SML-like option
  + cljext.sax - Simple Sax parser 
  + cljext.seq - Sequence functions/macros parser 
  + cljext.str - String functions
