@@ -131,8 +131,8 @@ Returns:
 true
 "
   ([in-file-name out-file-name & [buffer-size]]
-     (with-open [inp (java.io.FileInputStream. in-file-name)
-		 outp (java.io.FileOutputStream. out-file-name)]
+     (with-open [inp (java.io.FileInputStream. #^String in-file-name)
+		 outp (java.io.FileOutputStream. #^String out-file-name)]
        ;; loop through files reading from one and writing to the other
        (let [buffer-size (if buffer-size buffer-size 1020)
 	     buffer (make-array Byte/TYPE buffer-size)]
@@ -143,8 +143,8 @@ true
 	     (do
 	       ;; write to output file 
 	       (if (= rd buffer-size)
-		 (.write outp (.getBytes (encode-string buffer)))
-		 (.write outp (.getBytes (encode-string  (subvec (apply vector (seq buffer)) 0 rd)))))
+		 (.write outp (.getBytes #^String (encode-string buffer)))
+		 (.write outp (.getBytes #^String (encode-string  (subvec (apply vector (seq buffer)) 0 rd)))))
 	       ;; keep looping
 	       (recur (.read inp buffer)))))))))
 
