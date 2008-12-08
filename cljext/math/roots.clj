@@ -102,18 +102,23 @@
        (loop [i (range max-iterations) 
 	      low low
 	      hi hi]
+	 ;; calculate values for a b & c
 	 (let [a (func low)
 	       b (func hi)
 	       midvalue (+ low (* 0.5 (- hi low)))
 	       c (func midvalue)]
-	   (cond (neg? (* a c))
+
+	   (cond (neg? (* a c))  ;; if a & c are different sides of the root
+		 ;; move swap hi with the midpoint
 		 (recur (rest i) low midvalue)
-		 (neg? (* b c))
+		 (neg? (* b c)) ;; if b  & c are different sides of the root...
 		 (recur (rest i) midvalue hi)
-		 (zero? (* a c))
+		 (zero? (* a c)) ;; if zero determine which pointer is the zero
 		 (if (zero? a)
 		   low
 		   midvalue)
+		 ;; if midpoint is within tolerqance or hit the max
+		 ;; on iterations return the midvalue
 		 (or (<= (abs c) precision) (nil? (rest i)))
 		 midvalue)))))))
 
