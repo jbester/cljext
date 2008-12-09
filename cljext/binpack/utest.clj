@@ -13,7 +13,7 @@
 
 (defn check-argument
   ([fmt & params]
-   (test-is/throws IllegalArgumentException (apply binpack/pack (cons fmt params)))))
+   (test-is/is (thrown? IllegalArgumentException (apply binpack/pack (cons fmt params))))))
 
 (test-is/deftest test-loopback
   ;; test padding

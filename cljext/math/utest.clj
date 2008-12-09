@@ -281,7 +281,7 @@
    (true? (= (math/factorial 5) 120)))
   (test-is/is 
    (true? (= (math/factorial 0) 1)))
-  (test-is/throws IllegalArgumentException (math/factorial -1))
+  (test-is/is (thrown? IllegalArgumentException (math/factorial -1)))
   )
 
 (test-is/deftest test-to-degrees
