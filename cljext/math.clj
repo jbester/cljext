@@ -293,12 +293,7 @@ integer factorial"
 		   (new java.lang.IllegalArgumentException
 			"Cannot perform factorial of a negative number"))
 	 (zero? n) 1
-	 true (loop [result 1
-		     i n]
-		(if (= i 1)
-		  result
-		  (recur (* result i)
-			 (dec i)))))))
+	 true (reduce * (rest (range (+ n 1)))))))
 			
 (defn to-degrees
   "(to-degrees rads)

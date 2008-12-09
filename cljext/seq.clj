@@ -85,18 +85,13 @@ e.g. (map* vector '(1 2) '(3 4 5)) => ([1 3] [2 4] [nil 5])
 (defn count-if
   "Count number of times predicate true in a list"
   ([pred col]
-     (loop [count 0
-	    col col]
-       (if (empty? col)
-	 count
-	 (recur 
-	  (if (pred (first col)) (inc count) count) 
-	  (rest col))))))
+     (count (for [item col :when (pred item)]
+       item))))
 
 (defn count-occurances
   "Count number of occurances in a list of specified item"
   ([item col]
-     (count-if (fn [i] (= i item)) col)))
+     (count-if (partial = item) col)))
 
 (defn member? 
   "Test for membership in a list"
@@ -116,13 +111,9 @@ e.g. (map* vector '(1 2) '(3 4 5)) => ([1 3] [2 4] [nil 5])
 (defn positions
   "Return the list of positions where a given element resides"
   ([el col]
-     (loop [col (enumerate col)
-	    result nil]
-       (let [[idx elem] (first col)]
-	 (if (empty? col)
-	   (reverse result)
-	   (recur (rest col)
-		  (if (= elem el) (cons idx result) result)))))))
+     (for [[idx elem] (enumerate col)
+	   :when (= elem el)]
+       idx)))
 	   
        
 (defn list-tabulate
@@ -142,3 +133,5 @@ e.g. (map* vector '(1 2) '(3 4 5)) => ([1 3] [2 4] [nil 5])
 	 @result)))
 		 
 	 
+
+  
