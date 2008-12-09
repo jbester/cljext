@@ -15,3 +15,6 @@ Thinking about it:
   + apache commons calendar/date functions
   + apache Math and/or Jama
  + lex/yacc port (seperate project?)
+ + math 
+  + interpolation
+  + solvers
