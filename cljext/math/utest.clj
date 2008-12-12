@@ -304,9 +304,9 @@
 
 (test-is/deftest test-product
   (test-is/is 
-   (true? (= (math/product i (range 1 10) i) (apply * (range 1 10)))))
+   (true? (= (math/product [i (range 1 10)] i) (apply * (range 1 10)))))
   (test-is/is 
-   (true? (= (math/product i (range 1 10 2) i) (apply * (range 1 10 2)))))
+   (true? (= (math/product [i (range 1 10 2)] i) (apply * (range 1 10 2)))))
   )
 
 

@@ -47,7 +47,34 @@
 		   ;; calculate the interpolated point
 		   (+ (nth y-points @start) (* delta slope)))))))))
 		     
-		 
+(defn legrange-basis-polynomial
+  "Return the jth legrange basis polynomial for a given set of points
+PRODUCT(i=0..k when i!=j,(x - x[i])/(x[j] - x[i]))
+"
+  ([j points]
+     (fn [x]
+       (product [i (range (count points))]
+		(if (= i j)
+		  1
+		  (let [x_i (nth points i)
+			x_j (nth points j)]
+		    (formula ( x - x_i ) / ( x_j - x_i ))))))))
+
+(defn legrange-interpolation 
+  ([points]
+     (let [points (list->vector points)
+	   [x-points y-points] (unzip points)
+	   basis-fns (vector-tabulate (count points) 
+				      (fn [j] 
+					(legrange-basis-polynomial j x-points)))]
+	   (fn [x]
+	     (with-local-vars [result 0]
+	       (dotimes [i (count points)]
+		 (let [func (nth basis-fns i)]
+		   (var-set result (+ @result (* (nth y-points i) (func x))))))
+	       @result)))))
+	 
 	     
 	   
+
        

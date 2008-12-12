@@ -563,7 +563,7 @@ term - binding for current term in range
 range - range 
 expr - expression to multiply
 "
-  ([term range expr]
+  ([[term range] expr]
      (let [prod (gensym)
 	   i (gensym)]
        `(loop [~prod 1
