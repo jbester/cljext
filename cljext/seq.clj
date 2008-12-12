@@ -179,7 +179,7 @@ as a parameter i.e. (vector-map 3 f) => [(f 0) (f 1) (f 2)]"
 (defn list->vector
   "Convert a list to a vector"
   ([col]
-     (apply vector col)))
+     (apply vector (seq col))))
 
        
        
