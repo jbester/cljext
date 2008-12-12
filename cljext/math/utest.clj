@@ -297,9 +297,9 @@
 
 (test-is/deftest test-summation
   (test-is/is 
-   (true? (= (math/summation i (range 10) i) (apply + (range 10)))))
+   (true? (= (math/summation [i (range 10)] i) (apply + (range 10)))))
   (test-is/is 
-   (true? (= (math/summation i (range 0 10 2) i) (apply + (range 0 10 2)))))
+   (true? (= (math/summation [i (range 0 10 2)] i) (apply + (range 0 10 2)))))
   )
 
 (test-is/deftest test-product

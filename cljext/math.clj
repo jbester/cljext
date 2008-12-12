@@ -450,7 +450,7 @@ term - binding for current term in range
 range - range 
 expr - expression to sum
 "
-  ([term range expr]
+  ([[term range] expr]
      (let [sum (gensym)
 	   i (gensym)]
        `(loop [~sum 0
