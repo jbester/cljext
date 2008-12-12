@@ -165,7 +165,7 @@ Hash as seq of bytes
 		 ;; hash what was read and loop again
 		 (hash (if (= rd buffer-size)
 			  buffer
-			  (subvec (apply vector (seq buffer)) 0 rd)))
+			  (subvec (cljext.seq/list->vector buffer) 0 rd)))
 		 (recur (.read inp buffer)))))))))
 	   
 	   
