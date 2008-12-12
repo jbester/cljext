@@ -49,6 +49,21 @@ e.g. (map* vector '(1 2) '(3 4 5)) => ([1 3] [2 4] [nil 5])
 	   (recur (conj result (apply fn (map first cols)))
 		  (map rest cols)))))))
 
+
+(defn vector-map*
+  "Vector Map that allows mismatch sized inputs
+e.g. (vector-map* vector '(1 2) '(3 4 5)) => ([1 3] [2 4] [nil 5])
+"
+  ([fn & cols]
+     (let [len (map count cols)]
+       (loop [result []
+	      cols cols]
+	 (if (every? empty? cols)
+	   result
+	   (recur (conj result (apply fn (map first cols)))
+		  (map rest cols)))))))
+
+
 (defn zip 
   "Zip two or more lists together"   
   ([& cols] 
@@ -122,6 +137,7 @@ e.g. (map* vector '(1 2) '(3 4 5)) => ([1 3] [2 4] [nil 5])
      (for [i (range n)]
        (func i))))
 
+
 (defn flatten-1
   "Flatten the list but only up to the depth of one"
   ([col]
@@ -134,4 +150,36 @@ e.g. (map* vector '(1 2) '(3 4 5)) => ([1 3] [2 4] [nil 5])
 		 
 	 
 
-  
+(defn vector-map
+  "Vector equivalent of map"
+  ([fn & seq]
+     (loop [result []
+	    seq seq]
+       (if (some empty? seq)
+	 result
+	 (recur (conj result (apply fn (map first seq)))
+		(map rest seq))))))
+	    
+(defn vector-filter
+  "Vector equivalent of filter"
+  ([fn seq]
+     (loop [result []
+	    seq seq]
+       (if (empty? seq)
+	 result
+	 (recur (if (fn (first seq)) (conj result (first seq)) result)
+		(rest seq))))))
+     
+(defn vector-tabulate
+  "Create a vector based on call func for each position with the index
+as a parameter i.e. (vector-map 3 f) => [(f 0) (f 1) (f 2)]"
+  ([n func]
+     (vector-map func (range n))))
+
+
+
+       
+       
+       
+
+

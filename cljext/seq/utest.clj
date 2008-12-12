@@ -4,6 +4,19 @@
 	      [clojure.contrib.test-is :as test-is]))
 
 
+(test-is/deftest test-vector-map
+   (test-is/is
+    (= (seq/vector-map vector '(1 2) '(3 4 5))
+       [[1 3] [2 4]]))
+  )
+
+(test-is/deftest test-vector-map*
+   (test-is/is
+    (= (seq/vector-map* vector '(1 2) '(3 4 5))
+       [[1 3] [2 4] [nil 5]]))
+  )
+
+
 (test-is/deftest test-map*
    (test-is/is
     (= (seq/map* vector '(1 2) '(3 4 5))
@@ -20,6 +33,7 @@
 		 )
 
 
+
 (test-is/deftest test-zip*
 		 (test-is/is
 		  (= (seq/zip* '(1 2 3) '(4 5))
@@ -32,6 +46,7 @@
 		  (= (seq/zip* '(1 2 3) '(4 5 6) '(7 8 9))
 		     '([1 4 7] [2 5 8] [3 6 9])))
 		 )
+
 
 
 (test-is/deftest test-lazy-zip
@@ -99,6 +114,25 @@
 		 (test-is/is
 		  (= (seq/list-tabulate 10 inc)
 		     '(1 2 3 4 5 6 7 8 9 10)))
+		 )
+
+(test-is/deftest test-vector-tabulate
+		 (test-is/is
+		  (= (seq/vector-tabulate 10 inc)
+		     '[1 2 3 4 5 6 7 8 9 10]))
+		 )
+
+(test-is/deftest test-vector-map
+		 (test-is/is
+		  (= (seq/vector-map inc (range 10))
+		     '[1 2 3 4 5 6 7 8 9 10]))
+		 )
+
+(test-is/deftest test-vector-filter
+		 (test-is/is
+		  (= (seq/vector-filter even? (range 10))
+		     (apply vector (filter even? (range 10)))))
+
 		 )
 
 
