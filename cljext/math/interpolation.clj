@@ -5,12 +5,6 @@
 (refer 'cljext.seq)
 (refer 'cljext.macros)
 
-(defn list->vector
-  "Convert a list to a vector"
-  ([col]
-     (apply vector col)))
-
-
 (defn linear-interpolation 
   "Return a function that interpolates for a set of points"
   ([points]
