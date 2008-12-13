@@ -51,7 +51,7 @@
   "Return the jth legrange basis polynomial for a given set of points
 PRODUCT(i=0..k when i!=j,(x - x[i])/(x[j] - x[i]))
 "
-  ([j points]
+  ([points j]
      (fn [x]
        (product [i (range (count points))]
 		(if (= i j)
@@ -63,17 +63,21 @@ PRODUCT(i=0..k when i!=j,(x - x[i])/(x[j] - x[i]))
 (defn legrange-interpolation 
   ([points]
      (let [points (list->vector points)
-	   [x-points y-points] (unzip points)
-	   basis-fns (vector-tabulate (count points) 
-				      (fn [j] 
-					(legrange-basis-polynomial j x-points)))]
-	   (fn [x]
-	     (with-local-vars [result 0]
-	       (dotimes [i (count points)]
-		 (let [func (nth basis-fns i)]
-		   (var-set result (+ @result (* (nth y-points i) (func x))))))
-	       @result)))))
-	 
+	   ;; get the x y points seperated as vectors
+	   [x-points y-points] (map list->vector (unzip points))
+	   ;; create a basis function generator
+	   basis-gen (partial legrange-basis-polynomial x-points)
+	   ;; create basis functions from 0 through (count points)
+	   basis-fns (vector-tabulate (count points) basis-gen)]
+       (fn [x]
+	 (with-local-vars [result 0] 
+	   (dotimes [i (count points)]
+	     (let [func (nth basis-fns i)]
+	       ;; summation( i := 0 .. #basis, y[i] * basis_i x[i] )
+	       (var-set result 
+			(+ @result (* (nth y-points i) (func x))))))
+	   @result)))))
+
 	     
 	   
 
