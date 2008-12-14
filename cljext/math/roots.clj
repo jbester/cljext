@@ -1,3 +1,5 @@
+
+
 (require 'cljext.math)
 (require 'cljext.seq)
 (require 'cljext.macros)
@@ -7,6 +9,7 @@
 
 
 (defn derivative 
+  "Calculate the derivative"
   ;; return a function to calculate the derivative
   ([func]
    (fn [x & [h]]
@@ -17,6 +20,7 @@
      (/ (- (func (+ x h)) (func x)) h))))
 
 (defn expand-interval
+  "Expand an interval until points are on opposite sides of the root"
   ([func x1 x2 & [max-iterations]]
      (with-default-values [max-iterations 20]
       (with-local-vars [low (min x1 x2)
@@ -49,6 +53,7 @@
 
 
 (defn contract-interval
+  "Contract an interval while points are on opposite sides of the root"
   ([func x1 x2 & [segments max-iterations]]
      (with-default-values [segments 10
 			   max-iterations 30]
@@ -82,11 +87,13 @@
 
 
 (defn find-interval
+  "Find an interval based on initial guesses"
   ([func x1 x2]
      (let [[low hi] (expand-interval func x1 x2)]
        (contract-interval func low hi))))
 
 (defn bisect
+  "Find root by bisection method"
   ([func x1 x2 & [max-iterations precision]]
      (with-default-values [max-iterations 20
 			   precision 1e-3]
