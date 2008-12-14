@@ -635,3 +635,21 @@ GCD(A,B)==GCD(B,A%B)
 
 	
 
+(defn derivative 
+  "Calculate the derivative
+
+ (derivative func)
+   return a function to calculate the derivative for a vlue of x
+
+ (derivative func x h)
+   calculate a derivative at a specific point
+   returns double
+"
+  ;; return a function to calculate the derivative
+  ([func]
+   (fn [x & [h]]
+       (derivative func x h)))
+  ;; calculate the derivative value
+  ([func x & [h]]
+   (let [h (if (nil? h) 1e-8 h)]
+     (/ (- (func (+ x h)) (func x)) h))))
