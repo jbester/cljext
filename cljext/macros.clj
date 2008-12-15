@@ -107,8 +107,9 @@ but don't want to use a keyword argument
      `(def ~(with-meta var (assoc (meta var) :private true)) ~val)))
 
 
-(defn fif
-  "Returns a function operating an if"
+(defn fn-if
+  "Returns a function operating an if, each parameter is a function that 
+takes in one parameter"
   ([test then & [else]]
      (fn [param]
        (if (test param)
@@ -160,9 +161,9 @@ but don't want to use a keyword argument
    (let [it (symbol "it")
 	 value (gensym)]
      ;; expands 
-     `(let [~value (ref nil)]
+     `(with-local-vars [~value nil]
 	(cl-style-cond ~@(for [term (partition 2 conds)] 
-			   `((setq ~value ~(first term)) 
+			   `((var-set ~value ~(first term)) 
 			     (let [~it @~value]
 			       ~@(rest term))))
 			   )))))
