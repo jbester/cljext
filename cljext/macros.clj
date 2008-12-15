@@ -105,3 +105,64 @@ but don't want to use a keyword argument
   "Define a private variabe"
   ([var & [val]]
      `(def ~(with-meta var (assoc (meta var) :private true)) ~val)))
+
+
+(defn fif
+  "Returns a function operating an if"
+  ([test then & [else]]
+     (fn [param]
+       (if (test param)
+	 (then param)
+	 (if (nil? else)
+	   nil
+	   (else param))))))
+
+(defmacro thunk
+  "Construct a thunk (a lambda with no parameters)"
+  ([ & body ] 
+     `(fn [] ~@body)))
+
+(defmacro n-thunk
+  "Construct a thunk (a lambda with parameters that are ignroed)"
+  ([ & body ] 
+     (let [param (gensym)]
+	   `(fn [& ~param] ~@body))))
+	
+
+(defmacro aif 
+  "Anaphoric If - binds the condition to it "
+  ([pred then & [else]] 
+     (let [it (symbol "it")]
+       `(let [~it ~pred]
+	  (if ~it
+	    ~then
+	    ~else)))))
+
+(defmacro awhen 
+  "Anaphoric When - binds the condition to it "
+  ([pred then] 
+     (let [it (symbol "it")]
+       `(let [~it ~pred]
+	  (when ~it
+	    ~then)))))
+
+(defmacro aunless 
+  "Anaphoric unless - binds the condition to it "
+  ([pred then] 
+     (let [it (symbol "it")]
+       `(let [~it ~pred]
+	  (unless ~it
+		  ~then)))))
+
+(defmacro acond 
+  "Anaphoric condition"
+  ([& conds] 
+   (let [it (symbol "it")
+	 value (gensym)]
+     ;; expands 
+     `(let [~value (ref nil)]
+	(cl-style-cond ~@(for [term (partition 2 conds)] 
+			   `((setq ~value ~(first term)) 
+			     (let [~it @~value]
+			       ~@(rest term))))
+			   )))))
