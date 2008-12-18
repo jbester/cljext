@@ -181,8 +181,32 @@ as a parameter i.e. (vector-map 3 f) => [(f 0) (f 1) (f 2)]"
   ([col]
      (apply vector (seq col))))
 
-       
-       
+(defn min-max
+  "Calculate min and max of a sequence"
+  ([col]
+     (loop [col col
+	    cur-min nil
+	    cur-max nil]
+       (if (nil? col)
+	 [cur-min cur-max]
+	 (let [[f & r] col]
+	   (cond (or (nil? cur-min) (< f cur-min))
+		 (recur r f cur-max)
+		 (or (nil? cur-max) (> f cur-max))
+		 (recur r cur-min f)
+		 true
+		 (recur r cur-min cur-max)))))))
+
+
+	   
+(defn freq
+  "Calculate frequency of items in collection"
+  ([col]
+     (let [freqs (atom {})]
+       (doseq [item col]
+	 (let [f (get @freqs item 0)]
+	   (swap! freqs assoc item (inc f))))
+       @freqs)))
        
 
 
