@@ -140,6 +140,24 @@
 
 		 )
 
+(test-is/deftest test-list->vector
+		 (test-is/is
+		  (= (seq/list->vector (range 10))
+		     [0 1 2 3 4 5 6 7 8 9]))
+		 )
+
+(test-is/deftest test-min-max
+		 (test-is/is
+		  (= (seq/min-max '(-5 10 3 4 7 8 9))
+		     [-5 10]))
+		 )
+
+(test-is/deftest test-freq
+		 (test-is/is
+		  (= (seq/freq '(a b c d a c b b))
+		     {'a 2 'b 3 'c 2 'd 1}))
+		 )
+
 
 (test-is/run-tests)
 
