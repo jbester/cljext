@@ -50,3 +50,4 @@
 (require 'cljext.hash.utest)
 (require 'cljext.math.utest)
 (require 'cljext.seq.utest)
+(require 'cljext.str.utest)
