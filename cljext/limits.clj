@@ -35,10 +35,10 @@
     (:refer-clojure)
     )
 
-(def +max-float+ (.MAX_VALUE Float))
-(def +min-float+ (.MIN_VALUE Float))
-(def +max-double+ (.MAX_VALUE Double))
-(def +min-double+ (.MIN_VALUE Double))
+(def +max-float+ java.lang.Float/MAX_VALUE)
+(def +min-float+ java.lang.Float/MIN_VALUE)
+(def +max-double+ java.lang.Float/MAX_VALUE)
+(def +min-double+ java.lang.Float/MIN_VALUE)
 
 (def +max-unsigned-long+ 0xFFFFFFFFFFFFFFFF)
 (def +min-unsigned-long+ 0x00)

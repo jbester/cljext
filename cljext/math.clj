@@ -40,11 +40,11 @@
 
 ;;;; CONSTANTS
 
-(def +pi+ (.PI Math))
-(def +e+ (.E Math))
-(def +NaN+ (.NaN Double))
-(def +Inf+ (.POSITIVE_INFINITY Double))
-(def +-Inf+ (.NEGATIVE_INFINITY Double))
+(def +pi+ Math/PI)
+(def +e+ Math/E)
+(def +NaN+ java.lang.Double/NaN)
+(def +Inf+ java.lang.Double/POSITIVE_INFINITY)
+(def +-Inf+ java.lang.Double/NEGATIVE_INFINITY)
 
 
 ;;;; PUBLIC
@@ -82,7 +82,7 @@ numeric"
   ([number]
   (if (integer? number)
     number
-    (.rint Math number))))
+    (Math/rint number))))
 
 
 ;;;; PUBLIC
@@ -172,7 +172,7 @@ numeric"
    (cond 
     (and (integer? exp) (not (neg? exp))) (ipow base exp)
     (and (integer? exp) (neg? exp)) (/ (ipow base (abs exp)))
-    true (.pow Math base exp))))
+    true (Math/pow base exp))))
 
 (defn log 
   "(log base value)
@@ -191,9 +191,9 @@ Returns:
 double
 "
   ([base value] 
-   (/ (.log Math value)
-      (.log Math base)))
-  ([value] (.log Math value)))
+   (/ (Math/log value)
+      (Math/log base)))
+  ([value] (Math/log value)))
 
 (defn log10
   "(log10 value)
@@ -253,7 +253,7 @@ Returns:
 double
 "
   ([val]
-   (.ceil Math val)))
+   (Math/ceil val)))
 
 (defn floor
   "(floor val)
@@ -264,7 +264,7 @@ val - numeric value
 Returns:
 double"
   ([val]
-   (.floor Math val)))
+   (Math/floor val)))
 
 (defn mod
   "(mod a n)
@@ -330,7 +330,7 @@ Returns:
 double
 "
   ([angle]
-   (.sin Math angle)))
+   (Math/sin angle)))
 
 (defn cos
   "(cos angle)
@@ -342,7 +342,7 @@ Returns:
 double
 "
   ([angle]
-   (.cos Math angle)))
+   (Math/cos angle)))
 
 (defn tan
   "(tan angle)
@@ -354,7 +354,7 @@ Returns:
 double
 "
   ([angle]
-   (.tan Math angle)))
+   (Math/tan angle)))
 
 (defn asin
   "(asin angle)
@@ -366,7 +366,7 @@ Returns:
 double
 "
   ([angle]
-   (.asin Math angle)))
+   (Math/asin angle)))
 
 (defn acos
   "(acos angle)
@@ -379,7 +379,7 @@ double
 
 "
   ([angle]
-   (.asin Math angle)))
+   (Math/asin angle)))
 
 (defn atan
   "(atan angle)
@@ -391,7 +391,7 @@ Returns:
 double
 "
   ([angle]
-   (.asin Math angle)))
+   (Math/asin angle)))
 
 (defn- round-half-up
   ([number]
