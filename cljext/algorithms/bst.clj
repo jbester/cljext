@@ -46,6 +46,21 @@
   ([key value & [left right]]
      (vector key value left right)))
 
+
+
+(defn rebuild-subtree
+  ([left right]
+     (let [[[key val ignore-left ignore-right :as new-root] right] (rebuild-subtree right)]
+       [key val left right]))
+       
+  ([[key val [lkey lval lleft lright :as left] right :as node]]
+     (do
+       (if (nil? lleft)
+	 [left [key val nil right]]
+	 (let [[new-root new-right] (rebuild-subtree left)
+	       [rkey rval rleft rright] right]
+	   [new-root [rkey rval new-right rright]])))))
+
 (defn bst-remove
   ([tree key]
      (if (empty? tree)
@@ -61,7 +76,8 @@
 		     (empty? cur-right)
 		     cur-left
 		     true
-		     nil))))))
+		     (rebuild-subtree cur-left cur-right)))))))
+		     
 
      
 
