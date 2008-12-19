@@ -43,4 +43,4 @@
      (let [reader (java.io.BufferedReader. (java.io.InputStreamReader. System/in))]
        (.readLine reader)))
   ([]
-     (prompt "> ")))
+     (prompt " > ")))

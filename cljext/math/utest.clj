@@ -113,12 +113,12 @@
 (test-is/deftest test-pi
   ;; 
   (test-is/is 
-   (true? (= (.sin Math (/ math/+pi+ 2)) 1))))
+   (true? (= (Math/sin (/ math/+pi+ 2)) 1))))
 
 (test-is/deftest test-e
   ;; 
   (test-is/is 
-   (true? (= (.log Math math/+e+) 1))))
+   (true? (= (Math/log math/+e+) 1))))
 
 
 (test-is/deftest test-round
