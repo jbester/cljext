@@ -30,7 +30,17 @@
 ;; (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 ;; SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(binding [*compile-path* "./"]
+  (compile 'cljext.math)
+  (compile 'cljext.binpack)
+  (compile 'cljext.base64)
+  (compile 'cljext.limits)
 
-(compile 'cljext.math)
-(compile 'cljext.limits)
-(compile 'cljext.binpack)
+  (compile 'cljext.sax)
+  (compile 'cljext.seq)
+  (compile 'cljext.str)
+  (compile 'cljext.hash)
+  (compile 'cljext.macros)
+  (compile 'cljext.system))
+
+
