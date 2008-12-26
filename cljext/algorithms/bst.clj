@@ -46,19 +46,28 @@
   ([key value & [left right]]
      (vector key value left right)))
 
-
-
 (defn rebuild-subtree
   ([left right]
-     (let [[[key val ignore-left ignore-right :as new-root] right] (rebuild-subtree right)]
+     ;; find new root and set children to left and right
+     (let [[new-root right] (rebuild-subtree right)
+	   [key val] new-root]
        [key val left right]))
        
-  ([[key val [lkey lval lleft lright :as left] right :as node]]
-     (do
-       (if (nil? lleft)
-	 [left [key val nil right]]
+  ([[key val left right :as node]]
+     ;; find new root
+     (let [[child-key child-val child-left child-right] left]
+       ;; see if the current node is the parent of the left most node
+       (if (nil? child-left)
+	 ;; return the left most node
+	 ;; rebuild the parent removing the child
+	 [left [key val child-right right]]
+	 ;; if not the left most node's parent
+	 ;; recurse down the tree 
 	 (let [[new-root new-right] (rebuild-subtree left)
 	       [rkey rval rleft rright] right]
+	   ;; rebuild tree using returned values i.e.
+	   ;; when we do find the leaf we are looking for
+	   ;; must rebuild tree so we can use it as the new root
 	   [new-root [rkey rval new-right rright]])))))
 
 (defn bst-remove
