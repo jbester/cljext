@@ -34,6 +34,7 @@
 (ns cljext.str
   (:refer-clojure))
 
+
 (defn chomp
   "Remove \r\n \n or \r line endings from string and return it"
   ([#^String str]
@@ -44,3 +45,12 @@
        	     (.substring str 0 (dec len))
 	     true
 	     str))))
+
+(defn str-concat
+  "Concatenate strings together"
+  ([& items]
+     (let [builder (StringBuilder.)]
+       (doseq [item items]
+	 (.append builder #^String item))
+       (.toString builder))))
+     

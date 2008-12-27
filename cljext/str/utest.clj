@@ -16,6 +16,15 @@
    (test-is/is
     (= (str/chomp "hello")
        "hello")))
+
+(test-is/deftest test-concat
+   (test-is/is
+    (= (str/str-concat "hello" " world")
+       "hello world"))
+   (test-is/is
+    (= (str/str-concat "hello" " world" " byte")
+       "hello world byte")))
+
  
 
 
