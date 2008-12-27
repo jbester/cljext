@@ -87,9 +87,6 @@
 		     true
 		     (rebuild-subtree cur-left cur-right)))))))
 		     
-
-     
-
 (defn insert-node
   ([tree [key :as node]]
      (if (empty? tree)
@@ -108,5 +105,26 @@
   ([tree key]
      (insert-node tree (make-bst-node key nil))))
 		     
-	       
+	 
+(defn node-key
+  ([node]
+     (first node)))
+
+(defn node-value
+  ([node]
+     (second node)))
+
+(defn node-left
+  ([node]
+     (nth node 3)))
+
+(defn node-right
+  ([node]
+     (nth node 4)))
+      
+;; (defn bst-find
+;;   ([tree key]
+;;      (let [k (node-key tree)] 
+;;      (if (= k key)
+;;        [key (node-value tree)]
 
