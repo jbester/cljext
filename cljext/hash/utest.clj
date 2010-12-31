@@ -1,7 +1,7 @@
 (ns cljext.hash.utest
     (:refer-clojure)
     (:require [cljext.hash :as hash]
-	      [clojure.contrib.test-is :as test-is]))
+	      [clojure.test :as test-is]))
 
 (test-is/deftest test-hash-test
 		 (let [md5 (hash/create-hash 'MD5)]

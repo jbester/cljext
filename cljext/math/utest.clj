@@ -1,7 +1,7 @@
 (ns cljext.math.utest
     (:refer-clojure)
     (:require [cljext.math :as math]
-	      [clojure.contrib.test-is :as test-is]))
+	      [clojure.test :as test-is]))
 
 (test-is/deftest test-bigdec?
   (test-is/is 
@@ -13,7 +13,7 @@
   (test-is/is 
    (false? (math/bigdec? (short 1024))))
   (test-is/is 
-   (false? (math/bigdec? (byte 1024))))
+   (false? (math/bigdec? (byte 24))))
   (test-is/is 
    (true? (math/bigdec? (bigdec 1024.4))))
   (test-is/is
@@ -34,7 +34,7 @@
   (test-is/is 
    (false? (math/bigint? (short 1024))))
   (test-is/is 
-   (false? (math/bigint? (byte 1024))))
+   (false? (math/bigint? (byte 24))))
   (test-is/is 
    (false? (math/bigint? (long 1024))))
   (test-is/is 
@@ -53,7 +53,7 @@
   (test-is/is 
    (true? (math/numeric? (short 1024))))
   (test-is/is 
-   (true? (math/numeric? (byte 1024))))
+   (true? (math/numeric? (byte 24))))
    (test-is/is 
     (true? (math/numeric? (bigint 1024))))
    (test-is/is 

@@ -1,7 +1,7 @@
 (ns cljext.base64.utest
     (:refer-clojure)
     (:require [cljext.base64 :as b64]
-	      [clojure.contrib.test-is :as test-is])
+	      [clojure.test :as test-is])
     )
 
 (defn loopback

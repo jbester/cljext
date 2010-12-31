@@ -1,7 +1,7 @@
 (ns cljext.str.utest
     (:refer-clojure)
     (:require [cljext.str :as str]
-              [clojure.contrib.test-is :as test-is]))
+              [clojure.test :as test-is]))
 
 (test-is/deftest test-chomp
    (test-is/is
