@@ -33,7 +33,6 @@
 
 (binding [*warn-on-reflection* true]
   (require 'cljext.math)
-  (require 'cljext.binpack)
   (require 'cljext.base64)
   (require 'cljext.limits)
 
@@ -45,7 +44,6 @@
   (require 'cljext.system))
 
 
-(require 'cljext.binpack.utest)
 (require 'cljext.base64.utest)
 (require 'cljext.hash.utest)
 (require 'cljext.math.utest)

@@ -12,7 +12,6 @@ standard library.
 Packages
 ---------
  + cljext.base64 - Base64 encoder/decoder
- + cljext.binpack - Binary packing/unpacking similar to python's struct library
  + cljext.hash - Message Digest library
  + cljext.limits - Maximum and minimum of java numeric types
  + cljext.macros - General control flow macros

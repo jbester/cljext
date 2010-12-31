@@ -32,7 +32,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (binding [*compile-path* "./"]
   (compile 'cljext.math)
-  (compile 'cljext.binpack)
   (compile 'cljext.base64)
   (compile 'cljext.limits)
 
