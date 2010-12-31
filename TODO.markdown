@@ -1,15 +1,14 @@
 Modifications to existing modules:
+-------
  + update XML sax parser clojure interface
+ + reimplement binpack API
 
 Thinking about it:
- + Network modues:
+-------
+ + Network modules:
   + sockets 
-  + network protocol implementations (HTTP/SMTP/POP/IMAP) may overlap or require J2EE
- + Data modules
-  + JSON encoder/decoder
-  + generic data structures/algorithms (e.g. red black tree, heap, etc ala SML/CAML may require Functors?)
-  + mime encoding/decoding
-  + Wrapper/front end to HD5 (ala pytables may be difficult do to soft typing)
+ + Additional sequence functionality:
+  + LINQ-like syntax added to sequences
  + Wrappers
   + apache commons IO 
   + apache commons calendar/date functions
