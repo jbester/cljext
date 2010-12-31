@@ -49,23 +49,23 @@
 
 
 
-;; (test-is/deftest test-lazy-zip
-;; 		 (test-is/is
-;; 		  (= (seq/lazy-zip '(1 2 3) '(4 5 6))
-;; 		     '([1 4] [2 5] [3 6])))
-;; 		 (test-is/is
-;; 		  (= (seq/lazy-zip '(1 2 3) '(4 5 6) '(7 8 9))
-;; 		     '([1 4 7] [2 5 8] [3 6 9])))
-;; 		 )
+(test-is/deftest test-lazy-zip
+		 (test-is/is
+		  (= (seq/lazy-zip '(1 2 3) '(4 5 6))
+		     '([1 4] [2 5] [3 6])))
+		 (test-is/is
+		  (= (seq/lazy-zip '(1 2 3) '(4 5 6) '(7 8 9))
+		     '([1 4 7] [2 5 8] [3 6 9])))
+		 )
 
-;; (test-is/deftest test-lazy-zip*
-;; 		 (test-is/is
-;; 		  (= (seq/lazy-zip* '(1 2 3) '(4 5 6))
-;; 		     '([1 4] [2 5] [3 6])))
-;; 		 (test-is/is
-;; 		  (= (seq/lazy-zip* '(1 2 3) '(4 5 6) '(7 8 9))
-;; 		     '([1 4 7] [2 5 8] [3 6 9])))
-;; 		 )
+(test-is/deftest test-lazy-zip*
+		 (test-is/is
+		  (= (seq/lazy-zip* '(1 2 3) '(4 5 6))
+		     '([1 4] [2 5] [3 6])))
+		 (test-is/is
+		  (= (seq/lazy-zip* '(1 2 3) '(4 5 6) '(7 8 9))
+		     '([1 4 7] [2 5 8] [3 6 9])))
+		 )
 
 (test-is/deftest test-unzip
 		 (test-is/is
