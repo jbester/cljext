@@ -263,19 +263,17 @@ double"
   ([val]
    (Math/floor val)))
 
-(defn mod
-  "(mod a n)
-Modulo of a number with the sign of the divisor.  Similar to rem except 
-result is same sign as divisor uses Knuth's floored division
-
-a - numeric
-n - numeric
-
-returns:
-numeric
-"
-  ([a n]
-   (- a (* n (floor (/ a n))))))
+;; (defn mod
+;;   "(mod a n)
+;; Modulo of a number with the sign of the divisor.  Similar to rem except 
+;; result is same sign as divisor uses Knuth's floored division
+;; a - numeric
+;; n - numeric
+;; returns:
+;; numeric
+;; "
+;;   ([a n]
+;;    (- a (* n (floor (/ a n))))))
 
 (defn factorial
   "(factorial n)
