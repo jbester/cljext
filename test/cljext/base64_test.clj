@@ -1,4 +1,4 @@
-(ns cljext.base64.utest
+(ns cljext.base64-test
     (:refer-clojure)
     (:require [cljext.base64 :as b64]
 	      [clojure.test :as test-is])
