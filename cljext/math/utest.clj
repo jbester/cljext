@@ -3,80 +3,6 @@
     (:require [cljext.math :as math]
 	      [clojure.test :as test-is]))
 
-(test-is/deftest test-bigdec?
-  (test-is/is 
-   (false? (math/bigdec? (bigint 1024))))
-  (test-is/is 
-   (false? (math/bigdec? 1024)))
-  (test-is/is 
-   (false? (math/bigdec? (long 1024))))
-  (test-is/is 
-   (false? (math/bigdec? (short 1024))))
-  (test-is/is 
-   (false? (math/bigdec? (byte 24))))
-  (test-is/is 
-   (true? (math/bigdec? (bigdec 1024.4))))
-  (test-is/is
-   (false? (math/bigdec? (double 1024.4))))
-  (test-is/is
-   (false? (math/bigdec? (float 1024.4))))
-  (test-is/is
-   (false? (math/bigdec? 3/4)))
-  (test-is/is
-   (false? (math/bigdec? "hello")))
-  )
-
-(test-is/deftest test-bigint?
-  (test-is/is 
-   (true? (math/bigint? (bigint 1024))))
-  (test-is/is 
-   (false? (math/bigint? 1024)))
-  (test-is/is 
-   (false? (math/bigint? (short 1024))))
-  (test-is/is 
-   (false? (math/bigint? (byte 24))))
-  (test-is/is 
-   (false? (math/bigint? (long 1024))))
-  (test-is/is 
-   (false? (math/bigint? (bigdec 1024.4))))
-  (test-is/is
-   (false? (math/bigint? (double 1024.4))))
-  (test-is/is
-   (false? (math/bigint? (float 1024.4))))
-  (test-is/is
-   (false? (math/bigint? 3/4)))
-  (test-is/is
-   (false? (math/bigint? "hello")))
-  )
-
-(test-is/deftest test-numeric?
-  (test-is/is 
-   (true? (math/numeric? (short 1024))))
-  (test-is/is 
-   (true? (math/numeric? (byte 24))))
-   (test-is/is 
-    (true? (math/numeric? (bigint 1024))))
-   (test-is/is 
-    (true? (math/numeric? 1024)))
-   (test-is/is 
-    (true? (math/numeric? (long 1024))))
-   (test-is/is 
-    (true? (math/numeric? (bigdec 1024.4))))
-   (test-is/is
-    (true? (math/numeric? (double 1024.4))))
-   (test-is/is
-    (true? (math/numeric? (float 1024.4))))
-   (test-is/is
-    (true? (math/numeric? 3/4)))
-   (test-is/is
-    (false? (math/numeric? "hello")))
-   (test-is/is
-    (false? (math/numeric? 'a)))
-   (test-is/is
-    (false? (math/numeric? nil)))
-  )
-
-  
 (test-is/deftest test-abs
   ;; test neg -> pos			
   (test-is/is 
@@ -113,12 +39,12 @@
 (test-is/deftest test-pi
   ;; 
   (test-is/is 
-   (true? (= (Math/sin (/ math/+pi+ 2)) 1))))
+   (true? (= (Math/sin (/ math/+pi+ 2)) 1.0))))
 
 (test-is/deftest test-e
   ;; 
   (test-is/is 
-   (true? (= (Math/log math/+e+) 1))))
+   (true? (= (Math/log math/+e+) 1.0))))
 
 
 (test-is/deftest test-round
@@ -220,20 +146,20 @@
   (test-is/is 
    (true? (= (math/log math/+e+) 1.0)))
   (test-is/is 
-   (true? (= (math/log 10 10) 1)))
+   (true? (= (math/log 10 10) 1.0)))
   (test-is/is 
-   (true? (= (math/log 10 100) 2)))
+   (true? (= (math/log 10 100) 2.0)))
   (test-is/is 
-   (true? (= (math/log 2 1024) 10)))
+   (true? (= (math/log 2 1024) 10.0)))
 
   )
 
 
 (test-is/deftest test-log10
   (test-is/is 
-   (true? (= (math/log10 10) 1)))
+   (true? (= (math/log10 10) 1.0)))
   (test-is/is 
-   (true? (= (math/log10 100) 2)))
+   (true? (= (math/log10 100) 2.0)))
   (test-is/is 
    (true? (= (math/log10 92) 1.9637878273455551)))
   )
@@ -249,31 +175,31 @@
   (test-is/is 
    (true? (= (math/sqrt (math/exp 2)) math/+e+)))
   (test-is/is 
-   (true? (= (math/sqrt 4) 2)))
+   (true? (= (math/sqrt 4) 2.0)))
   )
 
 (test-is/deftest test-root
   (test-is/is 
-   (true? (= (math/root 3 27) 3)))
+   (true? (= (math/root 3 27) 3.0)))
   (test-is/is 
-   (true? (= (math/root 2 4) 2)))
+   (true? (= (math/root 2 4) 2.0)))
   (test-is/is 
    (true? (= (float (math/root 3 (math/exp 3))) (float  math/+e+))))
   )
 
 (test-is/deftest test-ceil
   (test-is/is 
-   (true? (= (math/ceil 3.4) 4)))
+   (true? (= (math/ceil 3.4) 4.0)))
   (test-is/is 
-   (true? (= (math/ceil -1.2) -1)))
+   (true? (= (math/ceil -1.2) -1.0)))
 
   )
 
 (test-is/deftest test-floor
   (test-is/is 
-   (true? (= (math/floor 3.4) 3)))
+   (true? (= (math/floor 3.4) 3.0)))
   (test-is/is 
-   (true? (= (math/floor -1.2) -2)))
+   (true? (= (math/floor -1.2) -2.0)))
   )
 
 (test-is/deftest test-factorial
@@ -286,12 +212,12 @@
 
 (test-is/deftest test-to-degrees
   (test-is/is 
-   (true? (= (math/to-degrees math/+pi+) 180)))
+   (true? (= (math/to-degrees math/+pi+) 180.0)))
 )
 
 (test-is/deftest test-to-radians
   (test-is/is 
-   (true? (= (math/to-radians 180) math/+pi+)))
+   (true? (= (math/to-radians 180.0) math/+pi+)))
   )
 
 

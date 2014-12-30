@@ -46,8 +46,26 @@
 
 ;;;; PUBLIC
 
+(defn to-integer
+  "(to-integer v)
+Coerce to an integer of the smallest type possible
 
-;;;; PRIVATE
+v - numeric
+
+Returns:
+integer numeric
+"
+  ([v]
+   (cond (> v +max-long+)
+	 (bigint v)
+	 (> v +max-integer+)
+	 (long v)
+	 (> v +max-short+)	 
+	 (int v)     
+	 (> v +max-byte+)	 
+	 (short v)     
+	 true
+	 (byte v))))
 
 (defn- ipow
   "(ipow base exp) 
@@ -67,11 +85,11 @@ exp - integer power to raise e to
 Returns:
 numeric"
   ([base exp]
-   (loop [result 1
+   (loop [result 1N
 	  count exp]
      (if (zero? count)
        result
-       (recur (* result base) (dec count)))))
+       (recur (* result base) (- count 1)))))
   ([exp]
    (ipow +e+ exp)))
 
@@ -79,68 +97,8 @@ numeric"
   ([number]
   (if (integer? number)
     number
-    (Math/rint number))))
+    (to-integer (Math/rint number)))))
 
-
-;;;; PUBLIC
-
-(defn integer
-  "(integer v)
-Coerce to an integer of the smallest type possible
-
-v - numeric
-
-Returns:
-integer numeric
-"
-  ([v]
-   (cond (> v +max-long+)
-	 (bigint v)
-	 (> v +max-integer+)
-	 (long v)
-	 (> v +max-short+)	 
-	 (integer v)     
-	 (> v +max-byte+)	 
-	 (short v)     
-	 true
-	 (byte v))))
-
-(defn bigdec?
-  "(bigdec? v)
-test if bigdecimal
-
-v - any value
-
-Returns:
-bool"
-  ([v]
-   (= (class v) java.math.BigDecimal)))
-
-(defn bigint?
-  "(bigint? v)
-test if biginteger
-
-v - any value
-
-Returns: 
-true if bigint otherwise false"
-  ([v]
-   (= (class v) java.math.BigInteger)))
-
-(defn numeric?
-  "(numeric? v)
-Check to see if v is a numeric type
-
-v - any value
-
-Returns:
-bool
-"
-  ([v]
-   (or (integer? v)
-       (float? v)
-       (bigdec? v)
-       (ratio? v ))))
 
 (defn abs
   "(abs n) 
@@ -395,8 +353,8 @@ double
      (let [x (mod (* (abs number) 10) 10)
 	   sign (if (pos? number) 1 -1)]
        (if (>= x 5)
-	 (* sign (ceil (abs number)))
-	 (* sign (floor (abs number))))))))
+	 (to-integer (* sign (ceil (abs number))))
+	 (to-integer (* sign (floor (abs number)))))))))
   
 (defn- round-half-down
   ([number]
@@ -405,8 +363,8 @@ double
     (let [x (mod (* (abs number) 10) 10)
 	  sign (if (pos? number) 1 -1)]
       (if (> x 5)
-	 (* sign (ceil (abs number)))
-	 (* sign (floor (abs number))))))))
+	 (to-integer (* sign (ceil (abs number))))
+	 (to-integer (* sign (floor (abs number)))))))))
 
 (defn round
   "(round number)
@@ -648,3 +606,8 @@ GCD(A,B)==GCD(B,A%B)
   ([func x & [h]]
    (let [h (if (nil? h) 1e-8 h)]
      (/ (- (func (+ x h)) (func x)) h))))
+
+
+;;;; PRIVATE
+
+
