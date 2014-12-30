@@ -8,7 +8,7 @@ cljext is a library containing clojure native code and wrappers of Java
 functions.  This provides extra functionality to pad out the clojure
 standard library.
 
-The targeted release by this library is clojure 1.2.0
+The targeted release by this library is clojure 1.6.0
 
 
 Packages
