@@ -442,9 +442,9 @@ expr - expression to sum
 (defop '<= 40)
 (defop '>= 40)
 (defop '- 50)
-(defop '+ 60)
+(defop '+ 50)
 (defop '/ 70)
-(defop '* 80)
+(defop '* 70)
 (defop 'mod 90 'rem)
 (defop '** 100 'cljext.math/** )
 
